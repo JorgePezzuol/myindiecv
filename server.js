@@ -3,7 +3,7 @@ const path = require("path");
 require("dotenv").config();
 const app = express();
 
-if (process.env.NODE_ENV === "prod") {
+if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "client", "build")));
 }
 
