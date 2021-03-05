@@ -3,14 +3,12 @@ const path = require("path");
 require("dotenv").config();
 const app = express();
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "client", "build")));
-}
+const PORT = process.env.PORT || 5000;
+
+app
+  .use(express.static(path.join(__dirname, "/client/build")))
+  .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "client", "index.html"));
+  res.sendFile(path.join(__dirname, "/client/build/index.html"));
 });
-
-const PORT = process.env.PORT || 80;
-
-app.listen(PORT, () => console.log(`Server is listening on port ${PORT}...`));
