@@ -44,7 +44,7 @@ function App() {
     <Router>
       <Switch>
         <Route path="/" exact render={() => <p>home</p>} />
-        <Route exact path="/login" component={Signin} />
+        <Route exact path="/test" component={Signin} />
         <Route exact path="/profile" render={() => <p>profile</p>}></Route>
         {/* <PrivateRoute authed={isLoggedIn} path="/profile" component={Signin} /> */}
         <Redirect to="/" />
