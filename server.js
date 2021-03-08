@@ -1,14 +1,52 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const path = require("path");
-require("dotenv").config();
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const app = express();
 
-const PORT = process.env.PORT || 5000;
+app.use(express.json());
+app.use(cookieParser());
+require("dotenv").config();
 
-app
-  .use(express.static(path.join(__dirname, "client", 'build')))
-  .listen(PORT, () => console.log(`Listening on ${PORT}`));
-
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+mongoose.connect(process.env.DATABASE_ACCESS, {
+  useNewUrlParser: true,
 });
+
+// app.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+//   );
+//   if (req.method === "OPTIONS") {
+//     res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
+//     return res.status(200).json({});
+//   }
+//   next();
+// });
+
+app.use(
+  cors({
+    origin: [
+      `${process.env.FRONT_END_URL}`,
+      "http://localhost:3000",
+      "https://mypage.com",
+    ],
+    credentials: true,
+  })
+);
+
+const userRouter = require("./server/routes/UserRoutes");
+
+app.use(userRouter);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "client", "build")));
+  app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+  });
+}
+
+const PORT = process.env.PORT || 5001;
+app.listen(PORT, () => console.log(`Listening on ${PORT}`));

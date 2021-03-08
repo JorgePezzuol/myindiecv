@@ -1,0 +1,22 @@
+GET http://localhost:5001/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDQyZGIxODZiOWI2YzJjMzc0ZDZlNzMiLCJlbWFpbCI6ImpvcmdlMkB0ZXN0LmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJG9MbmV4eTF6d2xsL3lNYnUzTzEvdS5qdGpYcG5sRFRRU0g3NWtadHF5UFJ2bW9zWkU3cjgyIiwiX192IjowLCJpYXQiOjE2MTUxNjgyODksImV4cCI6MTYxNTE2ODMxNH0.qTW5IThYrQfc8mhA395hrkgpyVZiVReCwMSJ4_vXlk0
+
+###
+
+POST http://localhost:5001/user
+Content-Type: application/json
+
+{
+    "email": "jorge2@test.com",
+    "password": "testpass"
+}
+
+###
+
+POST http://localhost:5001/login
+Content-Type: application/json
+
+{
+    "email":"jorge2@test.com",
+    "password": "testpass"
+}
