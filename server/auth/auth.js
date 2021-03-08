@@ -6,12 +6,10 @@ module.exports.authenticateToken = (req, res, next) => {
   const token = req.cookies.token || "";
   try {
     if (!token) {
-      //return res.sendStatus(401);
-      res.redirect("/login");
+      return res.sendStatus(401);
     }
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-      //if (err) return res.sendStatus(401);
-      if (err) res.redirect("/login");
+      if (err) return res.sendStatus(401);
       req.user = user;
       next();
     });
