@@ -36,5 +36,11 @@ UserSchema.methods.isValidPassword = async function (password) {
   return compare;
 };
 
+UserSchema.methods.toJSON = function () {
+  var obj = this.toObject();
+  delete obj.password;
+  return obj;
+};
+
 const UserModel = moongose.model("User", UserSchema);
 module.exports = UserModel;

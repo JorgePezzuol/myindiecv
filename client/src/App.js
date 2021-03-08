@@ -1,5 +1,12 @@
 import { useEffect } from "react";
-import Sign from "./components/Signin";
+import {
+  Switch,
+  Route,
+  BrowserRouter as Router,
+  Redirect,
+} from "react-router-dom";
+import Signin from "./components/Signin";
+import Signup from "./components/Signup";
 
 function App() {
   useEffect(() => {
@@ -33,7 +40,34 @@ function App() {
     return data;
   };
 
-  return <Sign />;
+  return (
+    <Router>
+      <Switch>
+        <Route path="/" exact render={() => <p>home</p>} />
+        <Route path="/login" component={Signin} />
+        <Route path="/profile" render={() => <p>profile</p>}></Route>
+        {/* <PrivateRoute authed={isLoggedIn} path="/profile" component={Signin} /> */}
+        <Redirect to="/" />
+      </Switch>
+    </Router>
+  );
+}
+
+function PrivateRoute({ component: Component, authed, ...rest }) {
+  return (
+    <Route
+      {...rest}
+      render={(props) =>
+        authed === true ? (
+          <Component {...props} />
+        ) : (
+          <Redirect
+            to={{ pathname: "/login", state: { from: props.location } }}
+          />
+        )
+      }
+    />
+  );
 }
 
 export default App;

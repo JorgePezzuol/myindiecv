@@ -44,41 +44,19 @@ app.post("/login", async (req, res) => {
 
     if (user && cmp) {
       const token = jwt.sign(user.toJSON(), process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: "25s",
+        expiresIn: "10s",
       });
       res.cookie("token", token, {
-        secure: false,
+        secure: process.env.NODE_ENV === "production" ? true : false,
         httpOnly: true,
       });
-      res.send({ token: token });
+      res.send({ user: user.toJSON() });
     } else {
-      res.send("User not found");
+      res.sendStatus(404);
     }
   } catch (err) {
     res.status(500).send(err);
-    console.error(err);
   }
 });
 
 module.exports = app;
-
-/*
-
-      try {
-        const user = await UserModel.findOne({ email });
-
-        if (!user) {
-          return done(null, false, { message: "User not found" });
-        }
-
-        const validate = await user.isValidPassword(password);
-
-        if (!validate) {
-          return done(null, false, { message: "Wrong Password" });
-        }
-
-        return done(null, user, { message: "Logged in Successfully" });
-      } catch (error) {
-        return done(error);
-      }
-      */
