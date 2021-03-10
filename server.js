@@ -7,6 +7,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
+
 require("dotenv").config();
 
 mongoose.connect(process.env.DATABASE_ACCESS, {
@@ -28,12 +29,12 @@ const userRouter = require("./server/routes/UserRoutes");
 
 app.use(userRouter);
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "client", "build")));
-  app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
-  });
-}
+//if (process.env.NODE_ENV === "production") {
+app.use(express.static(path.join(__dirname, "client", "build")));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});
+//}
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));

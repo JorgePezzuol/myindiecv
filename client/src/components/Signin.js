@@ -12,6 +12,7 @@ import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import { useHistory } from "react-router-dom";
 
 function Copyright() {
   return (
@@ -59,6 +60,30 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Signin() {
   const classes = useStyles();
+  const { push } = useHistory();
+
+  const fetchToken = async () => {
+    const response = await fetch("/login", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({ email: "jorge2@test.com", password: "testpass" }),
+    });
+    const data = await response.json();
+    return data;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const res = await fetchToken();
+    if (res) {
+      push({
+        pathname: "/profile",
+        state: {},
+      });
+    }
+  };
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -72,7 +97,7 @@ export default function Signin() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <form className={classes.form}>
+          <form className={classes.form} onSubmit={handleSubmit}>
             <TextField
               variant="outlined"
               margin="normal"

@@ -44,19 +44,43 @@ app.post("/login", async (req, res) => {
 
     if (user && cmp) {
       const token = jwt.sign(user.toJSON(), process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: "10s",
+        expiresIn: "20s",
       });
       res.cookie("token", token, {
-        secure: process.env.NODE_ENV === "production" ? true : false,
-        httpOnly: true,
+        secure: process.env.NODE_ENV === "production" ? false : false,
+        httpOnly: false,
       });
       res.send({ user: user.toJSON() });
     } else {
-      res.sendStatus(404);
+      res.status(404).send(err);
     }
   } catch (err) {
     res.status(500).send(err);
   }
+});
+
+app.get("/authenticateToken", async (req, res) => {
+  let resp = true;
+  console.log(req.cookies.token);
+  jwt.verify(
+    req.cookies.token,
+    process.env.ACCESS_TOKEN_SECRET,
+    (err, decoded) => {
+      if (err) {
+        console.log(err);
+        resp = false;
+      }
+    }
+  );
+
+  console.log(resp);
+  if (resp) {
+    res.sendStatus(200);
+  } else {
+    res.sendStatus(401);
+  }
+  //auth.authenticateToken(req, res);
+  //res.send({ resp: false });
 });
 
 module.exports = app;
