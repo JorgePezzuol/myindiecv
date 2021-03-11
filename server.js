@@ -26,15 +26,17 @@ app.use(
 );
 
 const userRouter = require("./server/routes/UserRoutes");
+const authRouter = require("./server/routes/AuthRoutes");
 
 app.use(userRouter);
+app.use(authRouter);
 
-//if (process.env.NODE_ENV === "production") {
-app.use(express.static(path.join(__dirname, "client", "build")));
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
-});
-//}
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "client", "build")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+  });
+}
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));

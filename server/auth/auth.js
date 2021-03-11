@@ -3,17 +3,19 @@ const jwt = require("jsonwebtoken");
 
 dotenv.config();
 module.exports.authenticateToken = (req, res, next) => {
-  const token = req.cookies.token || "";
+  let resp = true;
   try {
-    if (!token) {
-      return res.sendStatus(401);
-    }
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-      if (err) return res.sendStatus(401);
-      req.user = user;
-      next();
-    });
+    jwt.verify(
+      req.cookies.token,
+      process.env.ACCESS_TOKEN_SECRET,
+      (err, decoded) => {
+        if (err) {
+          resp = false;
+        }
+      }
+    );
+    resp ? res.sendStatus(200) : res.sendStatus(401);
   } catch (err) {
-    return res.status(500);
+    res.sendStatus(500);
   }
 };
