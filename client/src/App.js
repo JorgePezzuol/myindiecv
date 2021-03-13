@@ -5,6 +5,8 @@ import Dashboard from "./pages/cv/Dashboard";
 import EditCV from "./pages/cv/EditCV";
 import Signup from "./pages/Signup";
 
+// CHECK THIS => https://material-ui.com/styles/basics/
+
 function App() {
   return (
     <Router>

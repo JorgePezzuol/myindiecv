@@ -50,7 +50,7 @@ const SessionAppBar = () => {
           noWrap
           className={classes.toolbarTitle}
         >
-          MyIndie CV
+          CV Maker
         </Typography>
         <nav>
           <Link
@@ -59,7 +59,7 @@ const SessionAppBar = () => {
             href="#"
             className={classes.link}
           >
-            About
+            Buy me a Coffee
           </Link>
         </nav>
         <Button

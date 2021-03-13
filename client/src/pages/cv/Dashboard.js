@@ -14,6 +14,8 @@ import { Link as LinkRouter } from "react-router-dom";
 import SessionAppBar from "../../components/auth/SessionAppBar";
 import Footer from "../../components/Footer";
 
+/* Put some image showing that there are no CVs (in case theres 0)*/
+
 const useStyles = makeStyles((theme) => ({
   heroContent: {
     backgroundColor: theme.palette.background.paper,
@@ -55,7 +57,6 @@ export default function Dashboard() {
             variant="h3"
             align="center"
             color="textPrimary"
-            gutterBottom
           >
             Dashboard
           </Typography>
