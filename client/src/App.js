@@ -11,7 +11,7 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route render={() => <p>/</p>} exact path="/" />
+        <Route component={Dashboard} exact path="/" />
         <Route component={Signin} exact path="/login" />
         <PrivateRoute component={Signin} path="/profile" exact />
         <Route component={Dashboard} exact path="/dashboard" />

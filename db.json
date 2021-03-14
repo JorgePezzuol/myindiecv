@@ -1,0 +1,105 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "jorge_pezzuol@hotmail.com",
+      "password": "*@)&@(&^*#%*^asdasidasd",
+      "name": "Jorge",
+      "lastName": "Pezzuol"
+    }
+  ],
+
+  "cvs": [
+    {
+      "id": 1,
+      "userId": 1,
+      "personalDetails": {
+        "jobTitle": "web developer",
+        "email": "jorge_pezzuol@hotmail.com",
+        "firstName": "Jorge",
+        "lastName": "Pezzuol"
+      },
+      "professionalSummary": "<p><strong>Laisjdasiodasd</strong></p>",
+      "employmentHistory": [
+        {
+          "id": 1,
+          "jobTitle": "Fullstack Developer",
+          "employer": "Superteia",
+          "startDate": "23/09/2015",
+          "endDate": "23/09/2018",
+          "city": "Sao Paulo",
+          "description": "<p><strong>Laisjdasiodasd</strong></p>"
+        },
+        {
+          "id": 2,
+          "jobTitle": "Web Developer",
+          "employer": "Azclick",
+          "startDate": "23/09/2013",
+          "endDate": "23/09/2014",
+          "city": "Sao Paulo",
+          "description": "<p><strong>fdgghghgfgh</strong></p>"
+        },
+        {
+          "id": 3,
+          "jobTitle": "Senior Consultant",
+          "employer": "Sennit",
+          "startDate": "23/09/2018",
+          "endDate": "23/09/2019",
+          "city": "Sao Paulo",
+          "description": "<p><strong>gggggg</strong></p>"
+        }
+      ]
+    }
+  ],
+
+  "cv": {
+    "id": 1,
+    "userId": 1,
+    "personalDetails": {
+      "id": 1,
+      "cvId": 1,
+      "jobTitle": "web developer",
+      "email": "jorge_pezzuol@hotmail.com",
+      "firstName": "Jorge",
+      "lastName": "Pezzuol"
+    },
+    "professionalSummary": {
+      "id": 1,
+      "cvId": 1,
+      "description": "<p><strong>Laisjdasiodasd</strong></p>"
+    },
+    "employmentHistory": {
+      "id": 1,
+      "cvId": 1,
+      "list": [
+        {
+          "id": 1,
+          "jobTitle": "Fullstack Developer",
+          "employer": "Superteia",
+          "startDate": "23/09/2015",
+          "endDate": "23/09/2018",
+          "city": "Sao Paulo",
+          "description": "<p><strong>Laisjdasiodasd</strong></p>"
+        },
+        {
+          "id": 2,
+          "jobTitle": "Web Developer",
+          "employer": "Azclick",
+          "startDate": "23/09/2013",
+          "endDate": "23/09/2014",
+          "city": "Sao Paulo",
+          "description": "<p><strong>fdgghghgfgh</strong></p>"
+        },
+        {
+          "id": 3,
+          "jobTitle": "Senior Consultant",
+          "employer": "Sennit",
+          "startDate": "23/09/2018",
+          "endDate": "23/09/2019",
+          "city": "Sao Paulo",
+          "description": "<p><strong>gggggg</strong></p>"
+        }
+      ]
+    }
+  }
+}

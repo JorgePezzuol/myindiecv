@@ -13,6 +13,7 @@ require("dotenv").config();
 mongoose.connect(process.env.DATABASE_ACCESS, {
   useNewUrlParser: true,
 });
+mongoose.set("useFindAndModify", false);
 
 app.use(
   cors({
@@ -21,11 +22,12 @@ app.use(
   })
 );
 
-const userRouter = require("./server/routes/UserRoutes");
-const authRouter = require("./server/routes/AuthRoutes");
-
-app.use(userRouter);
-app.use(authRouter);
+// remember to put /api before all
+app.use(require("./server/routes/AuthRoutes"));
+app.use(require("./server/routes/UserRoutes"));
+app.use(require("./server/routes/PersonalDetailsRoutes"));
+app.use(require("./server/routes/ProfessionalSummaryRoutes"));
+app.use(require("./server/routes/CvRoutes"));
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "client", "build")));

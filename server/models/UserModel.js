@@ -1,7 +1,7 @@
-const moongose = require("mongoose");
+const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
-const UserSchema = new moongose.Schema({
+const UserSchema = new mongoose.Schema({
   email: {
     type: String,
     trim: true,
@@ -42,5 +42,5 @@ UserSchema.methods.toJSON = function () {
   return obj;
 };
 
-const UserModel = moongose.model("User", UserSchema);
+const UserModel = mongoose.model("User", UserSchema);
 module.exports = UserModel;

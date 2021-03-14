@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import SessionAppBar from "../../components/auth/SessionAppBar";
@@ -20,6 +20,7 @@ import ProfessionalSummary from "../../components/cv/ProfessionalSummary";
 import EmploymentHistory from "../../components/cv/EmploymentHistory";
 import AlertDialogSlide from "../../components/utils/AlertDialogSlide";
 import Snackbar from "../../components/utils/SnackBar";
+import _ from "lodash";
 
 const useStyles = makeStyles((theme) => ({
   heroContent: {
@@ -35,129 +36,204 @@ const useStyles = makeStyles((theme) => ({
 
 const EditCV = () => {
   const classes = useStyles();
-  const [employmentList, setEmploymentList] = useState([]);
+
   const [employmentIdToBeDeleted, setEmploymentIdToBeDeleted] = useState(0);
   const [hasDeletedEntry, setHasDeletedEntry] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  const [employmentHistory, setEmploymentHistory] = useState({});
+  const [personalDetails, setPersonalDetails] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    jobTitle: "",
+  });
+
+  // @@@ FIX THIS => CASE WHEN THE DATABASE IS EMPTY !!!
+  const [professionalSummary, setProfessionalSummary] = useState();
+  const API_URL = "http://localhost:5001";
+
+  useEffect(() => {
+    const getCvById = async () => {
+      const data = await fetchCvById();
+      setPersonalDetails(data.personalDetails);
+      setProfessionalSummary(data.professionalSummary);
+    };
+    getCvById();
+    setIsLoading(false);
+  }, []);
+
+  useEffect(() => {
+    const updatePersonalDetails = async (personalDetails) => {
+      setIsUpdating(true);
+      const response = await fetch(
+        `${API_URL}/personaldetails/${personalDetails._id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(personalDetails),
+        }
+      );
+      const data = await response.json();
+      setIsUpdating(false);
+      return data;
+    };
+    const timeoutId = setTimeout(
+      () => updatePersonalDetails(personalDetails),
+      2000
+    );
+    return () => clearTimeout(timeoutId);
+  }, [personalDetails]);
+
+  useEffect(() => {
+    const updateProfessionalSummary = async (professionalSummary) => {
+      setIsUpdating(true);
+      const response = await fetch(
+        `${API_URL}/professionalsummary/${professionalSummary._id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(professionalSummary),
+        }
+      );
+      const data = await response.json();
+      setIsUpdating(false);
+      return data;
+    };
+    const timeoutId = setTimeout(
+      () => updateProfessionalSummary(professionalSummary),
+      2000
+    );
+    return () => clearTimeout(timeoutId);
+  }, [professionalSummary]);
+
+  const fetchCvById = async () => {
+    const response = await fetch(`${API_URL}/cv/604d6f3b4919d19f95f3200f`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        user: "6042db186b9b6c2c374d6e73",
+      }),
+    });
+    const data = await response.json();
+    return data;
+  };
 
   // fetch all the employement history and then we get the (count())
   // after that render employment experience according to count()
-  useEffect(() => {
-    setEmploymentList([
-      {
-        id: 1,
-        jobtitle: "asdassd",
-        employer: "asdasd",
-        startdate: "324324",
-        enddate: "3434",
-        city: "asdad",
-        description: "asdad",
-      },
-      {
-        id: 2,
-        jobtitle: "asdassd",
-        employer: "asdasd",
-        startdate: "324324",
-        enddate: "3434",
-        city: "asdad",
-        description: "asdad",
-      },
-      {
-        id: 3,
-        jobtitle: "asdassd",
-        employer: "asdasd",
-        startdate: "324324",
-        enddate: "3434",
-        city: "asdad",
-        description: "asdad",
-      },
-    ]);
-  }, []);
+  // const deleteEmployment = (employmentId) => {
+  //   setEmploymentList(
+  //     employmentList.filter((employment) => employment.id !== employmentId)
+  //   );
+  //   setEmploymentIdToBeDeleted(0);
+  //   setHasDeletedEntry(true);
+  // };
 
-  const deleteEmployment = (employmentId) => {
-    setEmploymentList(
-      employmentList.filter((employment) => employment.id !== employmentId)
-    );
-    setEmploymentIdToBeDeleted(0);
-    setHasDeletedEntry(true);
-  };
+  // const addEmployment = async () => {
+  //   setEmploymentList([
+  //     ...employmentList,
+  //     {
+  //       id: Math.floor(Math.random() * 10000) + 1,
+  //       jobtitle: "asdassd",
+  //       employer: "asdasd",
+  //       startdate: "324324",
+  //       enddate: "3434",
+  //       city: "asdad",
+  //       description: "asdad",
+  //     },
+  //   ]);
+  // };
 
-  const addEmployment = async () => {
-    setEmploymentList([
-      ...employmentList,
-      {
-        id: Math.floor(Math.random() * 10000) + 1,
-        jobtitle: "asdassd",
-        employer: "asdasd",
-        startdate: "324324",
-        enddate: "3434",
-        city: "asdad",
-        description: "asdad",
-      },
-    ]);
-  };
-
-  return (
-    <React.Fragment>
-      <CssBaseline />
-      <SessionAppBar />
-      {hasDeletedEntry && <Snackbar setHasDeletedEntry={setHasDeletedEntry} />}
-      {employmentIdToBeDeleted > 0 && (
-        <AlertDialogSlide
-          title={"Delete Entry"}
-          contentText={"Are you sure you want to delete this entry?"}
-          handleConfirm={() => deleteEmployment(employmentIdToBeDeleted)}
-          handleClose={() => setEmploymentIdToBeDeleted(0)}
-        />
-      )}
-      <div className={classes.heroContent}>
-        <Container maxWidth="sm">
-          <Typography
-            variant="h4"
-            align="center"
-            color="textPrimary"
-            gutterBottom
-          >
-            Untitled
-          </Typography>
-          <Typography
-            variant="subtitle2"
-            align="center"
-            color="textSecondary"
-            paragraph
-          >
-            English
-          </Typography>
-        </Container>
-      </div>
-      <Divider />
-      <Container maxWidth="md" style={{ marginTop: 30 }}>
-        <Grid container spacing={2}>
-          <PersonalDetail />
-          <Box mt={10} />
-          <ProfessionalSummary />
-          <Box mt={10} />
-          <EmploymentHistory
-            employmentList={employmentList}
-            addEmployment={addEmployment}
-            setEmploymentIdToBeDeleted={setEmploymentIdToBeDeleted}
+  if (!isLoading) {
+    return (
+      <React.Fragment>
+        <CssBaseline />
+        <SessionAppBar />
+        {hasDeletedEntry && (
+          <Snackbar setHasDeletedEntry={setHasDeletedEntry} />
+        )}
+        {employmentIdToBeDeleted > 0 && (
+          <AlertDialogSlide
+            title={"Delete Entry"}
+            contentText={"Are you sure you want to delete this entry?"}
+            //handleConfirm={() => deleteEmployment(employmentIdToBeDeleted)}
+            handleConfirm={() => {}}
+            handleClose={() => setEmploymentIdToBeDeleted(0)}
           />
-        </Grid>
-        <Fab
-          style={{ textTransform: "none" }}
-          variant="extended"
-          size="large"
-          color="primary"
-          aria-label="add"
-          className={classes.fab}
-        >
-          <b>Preview & Download</b>
-          <Box ml={1}>
-            <DescriptionIcon />
-          </Box>
-        </Fab>
-      </Container>
-    </React.Fragment>
-  );
+        )}
+        <div className={classes.heroContent}>
+          <Container maxWidth="sm">
+            <Typography
+              variant="h4"
+              align="center"
+              color="textPrimary"
+              gutterBottom
+            >
+              Untitled
+            </Typography>
+            <Typography
+              variant="subtitle2"
+              align="center"
+              color="textSecondary"
+              paragraph
+            >
+              English
+            </Typography>
+          </Container>
+        </div>
+        <Divider />
+        <Container maxWidth="md" style={{ marginTop: 30 }}>
+          <Grid container spacing={2}>
+            <React.Fragment>
+              <PersonalDetail
+                personalDetails={personalDetails}
+                setPersonalDetails={setPersonalDetails}
+              />
+
+              <Box mt={10} />
+              <ProfessionalSummary
+                professionalSummary={professionalSummary}
+                setProfessionalSummary={setProfessionalSummary}
+              />
+              <Box mt={10} />
+              <EmploymentHistory
+                employmentList={[]}
+                addEmployment={() => {}}
+                setEmploymentIdToBeDeleted={() => {}}
+              />
+            </React.Fragment>
+          </Grid>
+          <Fab
+            style={{ textTransform: "none" }}
+            variant="extended"
+            size="large"
+            color="primary"
+            aria-label="add"
+            className={classes.fab}
+          >
+            <b>Preview & Download</b>
+            <Box ml={1}>
+              {isUpdating ? (
+                // CHECK THIS ERROR !!!
+                <CircularProgress size={25} color="white" fontSize="small" />
+              ) : (
+                <DescriptionIcon />
+              )}
+            </Box>
+          </Fab>
+        </Container>
+      </React.Fragment>
+    );
+  } else {
+    return <p>Loading...</p>;
+  }
 };
 
 export default EditCV;

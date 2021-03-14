@@ -39,7 +39,6 @@ const NewEmployementExperience = ({
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  id="filled-uncontrolled"
                   label="Job Title"
                   variant="filled"
                   size="small"
@@ -49,7 +48,6 @@ const NewEmployementExperience = ({
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  id="filled-uncontrolled"
                   label="Employer"
                   variant="filled"
                   size="small"
@@ -58,7 +56,6 @@ const NewEmployementExperience = ({
               </Grid>
               <Grid item xs={6} sm={3}>
                 <TextField
-                  id="filled-uncontrolled"
                   label="Start date"
                   variant="filled"
                   size="small"
@@ -67,7 +64,6 @@ const NewEmployementExperience = ({
               </Grid>
               <Grid item xs={6} sm={3}>
                 <TextField
-                  id="filled-uncontrolled"
                   label="End date"
                   variant="filled"
                   size="small"
@@ -76,7 +72,6 @@ const NewEmployementExperience = ({
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  id="filled-uncontrolled"
                   label="City"
                   variant="filled"
                   size="small"

@@ -21,5 +21,35 @@ Content-Type: application/json
     "password": "testpass"
 }
 
+###
+
+PATCH http://localhost:5001/professionalsummary/604e53c9635db508b9216c35
+Content-Type: application/json
+
+{
+    "cv": "604d6f3b4919d19f95f3200f",
+    "description": "<p><strong>ggg</strong></p>"
+}
+
+###
+
+DELETE http://localhost:5001/professionalsummary/604e53c9635db508b9216c35
 
 
+###
+
+POST http://localhost:5001/professionalsummary
+Content-Type: application/json
+
+{
+    "cv": "604d6f3b4919d19f95f3200f",
+    "description": "<p><strong>hoausdhasdasud</strong></p>"
+}
+
+###
+
+GET http://localhost:5001/professionalsummary/cv/604d6f3b4919d19f95f3200f
+
+###
+
+GET http://localhost:5001/professionalsummary/604e53c9635db508b9216c35

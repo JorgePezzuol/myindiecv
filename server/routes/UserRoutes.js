@@ -7,6 +7,17 @@ const app = express();
 
 app.get("/users", auth.authenticateToken, async (req, res) => {
   try {
+    //const users = await userModel.find({ _id: "6042db186b9b6c2c374d6e73" });
+    const users = await userModel.find({});
+    res.send(users);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
+app.get("/test", async (req, res) => {
+  try {
+    //const users = await userModel.find({ _id: "6042db186b9b6c2c374d6e73" });
     const users = await userModel.find({});
     res.send(users);
   } catch (err) {

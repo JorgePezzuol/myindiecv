@@ -1,16 +1,20 @@
 import { useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
-import { EditorState } from "draft-js";
+import { EditorState, ContentState, convertFromHTML } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "../../assets/wysig.css";
 import { convertToHTML } from "draft-convert";
 
-const RichTextEditor = () => {
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty()
+const RichTextEditor = ({ object, setObject }) => {
+  const [editorState, setEditorState] = useState(
+    EditorState.createWithContent(
+      ContentState.createFromBlockArray(
+        convertFromHTML(
+          object ? object.description : "<p>Overall experience</p>"
+        )
+      )
+    )
   );
-
-  const [convertedContent, setConvertedContent] = useState(null);
 
   const handleEditorChange = (state) => {
     setEditorState(state);
@@ -19,8 +23,10 @@ const RichTextEditor = () => {
 
   const convertContentToHTML = () => {
     let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
-    setConvertedContent(currentContentAsHTML);
-    console.log(convertedContent);
+    setObject({
+      ...object,
+      description: currentContentAsHTML,
+    });
   };
   return (
     <Editor
