@@ -18,7 +18,7 @@ Content-Type: application/json
 {
     "cv": "604d6f3b4919d19f95f3200f",
     "jobTitle": "job title",
-    "email": "jorge_pezzuol@hotmail.com",
+    "mail": "jorge_pezzuol@hotmail.com",
     "firstName": "Jorge",
     "lastName": "Pezzuol"
 }

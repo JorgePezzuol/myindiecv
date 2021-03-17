@@ -6,6 +6,10 @@ const CvSchema = mongoose.Schema({
     required: [true, "User Id required"],
     ref: "users",
   },
+  name: {
+    type: String,
+    default: "Untitled",
+  },
 });
 
 const CvModel = mongoose.model("cvs", CvSchema);

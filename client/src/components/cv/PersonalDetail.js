@@ -39,10 +39,10 @@ const PersonalDetail = ({ personalDetails, setPersonalDetails }) => {
           onChange={(e) =>
             setPersonalDetails({
               ...personalDetails,
-              email: e.target.value,
+              mail: e.target.value,
             })
           }
-          value={personalDetails.email}
+          value={personalDetails.mail}
         />
       </Grid>
       <Grid item xs={12} sm={6}>
@@ -78,7 +78,19 @@ const PersonalDetail = ({ personalDetails, setPersonalDetails }) => {
         />
       </Grid>
       <Grid item xs={12} sm={6}>
-        <TextField label="Phone" variant="filled" size="small" fullWidth />
+        <TextField
+          label="Phone"
+          variant="filled"
+          size="small"
+          fullWidth
+          onChange={(e) =>
+            setPersonalDetails({
+              ...personalDetails,
+              phone: e.target.value,
+            })
+          }
+          value={personalDetails.phone}
+        />
       </Grid>
     </React.Fragment>
   );

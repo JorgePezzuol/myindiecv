@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Signin() {
+const Signin = () => {
   const classes = useStyles();
   const { push } = useHistory();
 
@@ -76,10 +76,11 @@ export default function Signin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetchToken();
-    if (res) {
+    const response = await fetchToken();
+    if (response) {
+      localStorage.setItem("user", JSON.stringify(response));
       push({
-        pathname: "/profile",
+        pathname: "/dashboard",
         state: {},
       });
     }
@@ -154,4 +155,6 @@ export default function Signin() {
       </Grid>
     </Grid>
   );
-}
+};
+
+export default Signin;

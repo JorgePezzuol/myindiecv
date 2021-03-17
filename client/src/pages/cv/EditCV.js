@@ -1,5 +1,7 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
+
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import SessionAppBar from "../../components/auth/SessionAppBar";
@@ -36,27 +38,30 @@ const useStyles = makeStyles((theme) => ({
 
 const EditCV = () => {
   const classes = useStyles();
+  const location = useLocation();
 
   const [employmentIdToBeDeleted, setEmploymentIdToBeDeleted] = useState(0);
   const [hasDeletedEntry, setHasDeletedEntry] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const [employmentHistory, setEmploymentHistory] = useState({});
+  // @@@ FIX THIS => CASE WHEN THE DATABASE IS EMPTY !!!
+  const [employmentHistory, setEmploymentHistory] = useState([]);
   const [personalDetails, setPersonalDetails] = useState({
+    jobTitle: "",
+    mail: "",
     firstName: "",
     lastName: "",
-    email: "",
-    jobTitle: "",
+    _id: "",
+    cv: "",
+    phone: "",
   });
-
-  // @@@ FIX THIS => CASE WHEN THE DATABASE IS EMPTY !!!
-  const [professionalSummary, setProfessionalSummary] = useState();
+  const [professionalSummary, setProfessionalSummary] = useState(null);
   const API_URL = "http://localhost:5001";
 
   useEffect(() => {
     const getCvById = async () => {
-      const data = await fetchCvById();
+      const data = await fetchCvById(location.state.cvId);
       setPersonalDetails(data.personalDetails);
       setProfessionalSummary(data.professionalSummary);
     };
@@ -112,15 +117,9 @@ const EditCV = () => {
     return () => clearTimeout(timeoutId);
   }, [professionalSummary]);
 
-  const fetchCvById = async () => {
-    const response = await fetch(`${API_URL}/cv/604d6f3b4919d19f95f3200f`, {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        user: "6042db186b9b6c2c374d6e73",
-      }),
+  const fetchCvById = async (cvId) => {
+    const response = await fetch(`${API_URL}/edit/cv/${cvId}`, {
+      credentials: "include",
     });
     const data = await response.json();
     return data;
@@ -196,7 +195,6 @@ const EditCV = () => {
                 personalDetails={personalDetails}
                 setPersonalDetails={setPersonalDetails}
               />
-
               <Box mt={10} />
               <ProfessionalSummary
                 professionalSummary={professionalSummary}

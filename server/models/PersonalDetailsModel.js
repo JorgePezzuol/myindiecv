@@ -8,28 +8,18 @@ const PersonalDetailsSchema = mongoose.Schema({
   },
   jobTitle: {
     type: String,
-    required: true,
   },
-  email: {
+  mail: {
     type: String,
-    trim: true,
-    lowercase: true,
-    unique: true,
-    validate: {
-      validator: function (v) {
-        return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
-      },
-      message: "Please enter a valid email",
-    },
-    required: [true, "Email required"],
   },
   firstName: {
     type: String,
-    required: true,
   },
   lastName: {
     type: String,
-    required: true,
+  },
+  phone: {
+    type: String,
   },
 });
 
@@ -37,4 +27,5 @@ const PersonalDetailsModel = mongoose.model(
   "personaldetails",
   PersonalDetailsSchema
 );
+
 module.exports = PersonalDetailsModel;

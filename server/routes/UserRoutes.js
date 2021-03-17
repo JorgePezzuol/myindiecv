@@ -55,14 +55,15 @@ app.post("/login", async (req, res) => {
 
     if (user && cmp) {
       const token = jwt.sign(user.toJSON(), process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: "30s",
+        expiresIn: "7d",
       });
       res.cookie("token", token, {
-        secure: process.env.NODE_ENV === "production" ? true : false,
-        httpOnly: true,
-        sameSite: true,
+        secure: process.env.NODE_ENV === "production" ? false : false,
+        httpOnly: false,
+        sameSite: false,
       });
-      res.status(200).send({ user: user.toJSON() });
+      console.log(user.toJSON());
+      res.status(200).send(user.toJSON());
     } else {
       res.sendStatus(404);
     }

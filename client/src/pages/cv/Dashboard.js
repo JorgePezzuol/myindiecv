@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
@@ -10,11 +10,9 @@ import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import { Link as LinkRouter } from "react-router-dom";
+import { Link as LinkRouter, useHistory } from "react-router-dom";
 import SessionAppBar from "../../components/auth/SessionAppBar";
 import Footer from "../../components/Footer";
-
-/* Put some image showing that there are no CVs (in case theres 0)*/
 
 const useStyles = makeStyles((theme) => ({
   heroContent: {
@@ -41,10 +39,37 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const cards = [1, 2, 3, 4, 5];
-
-export default function Dashboard() {
+const Dashboard = () => {
   const classes = useStyles();
+  const [cvs, setCvs] = useState([]);
+  const { push } = useHistory();
+  const API_URL = "http://localhost:5001";
+
+  /* Put some image showing that there are no CVs (in case theres 0)*/
+  useEffect(() => {
+    const fetchCvs = async () => {
+      const response = await fetch(`${API_URL}/cv/user`, {
+        credentials: "include",
+      });
+      const data = await response.json();
+      setCvs(data);
+    };
+    fetchCvs();
+  }, []);
+
+  const handleCreateNewCv = async () => {
+    const response = await fetch(`${API_URL}/create/cv`, {
+      method: "POST",
+      credentials: "include",
+    });
+    const cv = await response.json();
+    push({
+      pathname: `cv/edit/${cv._id}`,
+      state: {
+        cvId: cv._id,
+      },
+    });
+  };
 
   return (
     <React.Fragment>
@@ -76,6 +101,7 @@ export default function Dashboard() {
                   variant="contained"
                   color="primary"
                   size="large"
+                  onClick={handleCreateNewCv}
                 >
                   Create New
                 </Button>
@@ -91,7 +117,7 @@ export default function Dashboard() {
       </div>
       <Container className={classes.cardGrid} maxWidth="md">
         <Grid container spacing={4}>
-          {cards.map((card) => (
+          {cvs.map((card) => (
             <Grid item key={card} xs={12} sm={6} md={4}>
               <Card className={classes.card}>
                 <CardMedia
@@ -109,12 +135,7 @@ export default function Dashboard() {
                   </Typography>
                 </CardContent>
                 <CardActions>
-                  <Button
-                    size="small"
-                    color="primary"
-                    component={LinkRouter}
-                    to={"/cv/edit/12"}
-                  >
+                  <Button size="small" color="primary">
                     Edit
                   </Button>
                   <Button size="small" color="primary">
@@ -132,4 +153,6 @@ export default function Dashboard() {
       <Footer />
     </React.Fragment>
   );
-}
+};
+
+export default Dashboard;

@@ -53,3 +53,11 @@ GET http://localhost:5001/professionalsummary/cv/604d6f3b4919d19f95f3200f
 ###
 
 GET http://localhost:5001/professionalsummary/604e53c9635db508b9216c35
+
+###
+
+POST http://localhost:5001/create/bunda
+Content-Type: application/json
+
+{
+}

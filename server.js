@@ -17,7 +17,10 @@ mongoose.set("useFindAndModify", false);
 
 app.use(
   cors({
-    origin: [`${process.env.FRONT_END_URL}`, "http://localhost:3000"],
+    origin: [
+      `${process.env.FRONT_END_URL}`,
+      "http://localhost:3000, http://localhost:5000",
+    ],
     credentials: true,
   })
 );
