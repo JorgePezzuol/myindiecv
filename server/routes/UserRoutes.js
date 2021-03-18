@@ -15,16 +15,6 @@ app.get("/users", auth.authenticateToken, async (req, res) => {
   }
 });
 
-app.get("/test", async (req, res) => {
-  try {
-    //const users = await userModel.find({ _id: "6042db186b9b6c2c374d6e73" });
-    const users = await userModel.find({});
-    res.send(users);
-  } catch (err) {
-    res.status(500).send(err);
-  }
-});
-
 app.post("/user", async (req, res) => {
   const hashedPass = await bcrypt.hash(req.body.password, 10);
   const user = new userModel({
@@ -58,9 +48,9 @@ app.post("/login", async (req, res) => {
         expiresIn: "7d",
       });
       res.cookie("token", token, {
-        secure: process.env.NODE_ENV === "production" ? false : false,
-        httpOnly: false,
-        sameSite: false,
+        secure: process.env.NODE_ENV === "production" ? true : false,
+        httpOnly: true,
+        sameSite: true,
       });
       console.log(user.toJSON());
       res.status(200).send(user.toJSON());

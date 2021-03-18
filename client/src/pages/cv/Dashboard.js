@@ -13,6 +13,7 @@ import Typography from "@material-ui/core/Typography";
 import { Link as LinkRouter, useHistory } from "react-router-dom";
 import SessionAppBar from "../../components/auth/SessionAppBar";
 import Footer from "../../components/Footer";
+import { API_URL } from "../../utils/utils";
 
 const useStyles = makeStyles((theme) => ({
   heroContent: {
@@ -43,7 +44,7 @@ const Dashboard = () => {
   const classes = useStyles();
   const [cvs, setCvs] = useState([]);
   const { push } = useHistory();
-  const API_URL = "http://localhost:5001";
+  //const API_URL = "http://localhost:5001/api";
 
   /* Put some image showing that there are no CVs (in case theres 0)*/
   useEffect(() => {
@@ -58,7 +59,7 @@ const Dashboard = () => {
   }, []);
 
   const handleCreateNewCv = async () => {
-    const response = await fetch(`${API_URL}/create/cv`, {
+    const response = await fetch(`${API_URL}/cv/create`, {
       method: "POST",
       credentials: "include",
     });

@@ -10,7 +10,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 // remember to check if the cv is really from the user
-app.get("/edit/cv/:cvId", async (req, res) => {
+app.get("/api/cv/edit/:cvId", async (req, res) => {
   try {
     const cv = await cvModel.findOne({
       _id: ObjectId(req.params.cvId),
@@ -40,8 +40,6 @@ app.get("/edit/cv/:cvId", async (req, res) => {
       cv: ObjectId(req.params.cvId),
     });
 
-    console.log(personalDetails);
-
     res.send({
       personalDetails: personalDetails,
       professionalSummary: professionalSummary,
@@ -51,18 +49,7 @@ app.get("/edit/cv/:cvId", async (req, res) => {
   }
 });
 
-app.get("/cv/user/:userId", async (req, res) => {
-  try {
-    const cvs = await cvModel.find({
-      user: ObjectId(req.params.userId),
-    });
-    res.send(cvs);
-  } catch (err) {
-    res.status(500).send(err);
-  }
-});
-
-app.get("/cv/user", async (req, res) => {
+app.get("/api/cv/user", async (req, res) => {
   try {
     let userId = 0;
     jwt.verify(
@@ -86,7 +73,7 @@ app.get("/cv/user", async (req, res) => {
 // CREATE CV AND RETURN THE OBJECTID
 // DONT FORGOT TO CREATE ALL THE NECESSARY COLLECTIONS
 // personal details, professional summaries, etc
-app.post("/create/cv", async (req, res) => {
+app.post("/api/cv/create", async (req, res) => {
   try {
     let userId = 0;
     jwt.verify(

@@ -4,7 +4,7 @@ const auth = require("../auth/auth");
 const app = express();
 const { ObjectId } = require("mongodb");
 
-app.get("/personaldetails/cv/:cvId", async (req, res) => {
+app.get("/api/personaldetails/cv/:cvId", async (req, res) => {
   try {
     const personalDetails = await personalDetailsModel.findOne({
       cv: ObjectId(req.params.cvId),
@@ -15,7 +15,7 @@ app.get("/personaldetails/cv/:cvId", async (req, res) => {
   }
 });
 
-app.get("/personaldetails/:id", async (req, res) => {
+app.get("/api/personaldetails/:id", async (req, res) => {
   try {
     const personalDetails = await personalDetailsModel.findOne({
       _id: ObjectId(req.params.id),
@@ -26,7 +26,7 @@ app.get("/personaldetails/:id", async (req, res) => {
   }
 });
 
-app.post("/personaldetails", async (req, res) => {
+app.post("/api/personaldetails", async (req, res) => {
   const personalDetails = new personalDetailsModel(req.body);
   try {
     await personalDetails.save();
@@ -36,7 +36,7 @@ app.post("/personaldetails", async (req, res) => {
   }
 });
 
-app.patch("/personaldetails/:id", async (req, res) => {
+app.patch("/api/personaldetails/:id", async (req, res) => {
   try {
     await personalDetailsModel.findOneAndUpdate(
       {
@@ -53,7 +53,7 @@ app.patch("/personaldetails/:id", async (req, res) => {
   }
 });
 
-app.delete("/personaldetails/:id", async (req, res) => {
+app.delete("/api/personaldetails/:id", async (req, res) => {
   try {
     const personalDetails = await personalDetailsModel.findOne({
       _id: ObjectId(req.params.id),

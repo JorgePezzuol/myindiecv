@@ -23,6 +23,7 @@ import EmploymentHistory from "../../components/cv/EmploymentHistory";
 import AlertDialogSlide from "../../components/utils/AlertDialogSlide";
 import Snackbar from "../../components/utils/SnackBar";
 import _ from "lodash";
+import { API_URL } from "../../utils/utils";
 
 const useStyles = makeStyles((theme) => ({
   heroContent: {
@@ -45,8 +46,8 @@ const EditCV = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
 
-  // @@@ FIX THIS => CASE WHEN THE DATABASE IS EMPTY !!!
   const [employmentHistory, setEmploymentHistory] = useState([]);
+  const [professionalSummary, setProfessionalSummary] = useState(null);
   const [personalDetails, setPersonalDetails] = useState({
     jobTitle: "",
     mail: "",
@@ -56,8 +57,6 @@ const EditCV = () => {
     cv: "",
     phone: "",
   });
-  const [professionalSummary, setProfessionalSummary] = useState(null);
-  const API_URL = "http://localhost:5001";
 
   useEffect(() => {
     const getCvById = async () => {
@@ -71,58 +70,48 @@ const EditCV = () => {
 
   useEffect(() => {
     const updatePersonalDetails = async (personalDetails) => {
-      setIsUpdating(true);
-      const response = await fetch(
-        `${API_URL}/personaldetails/${personalDetails._id}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify(personalDetails),
-        }
-      );
-      const data = await response.json();
-      setIsUpdating(false);
-      return data;
+      return updateEntity("personaldetails", personalDetails);
     };
-    const timeoutId = setTimeout(
-      () => updatePersonalDetails(personalDetails),
-      2000
-    );
+    const timeoutId = _setTimeout(updatePersonalDetails, personalDetails);
     return () => clearTimeout(timeoutId);
   }, [personalDetails]);
 
   useEffect(() => {
     const updateProfessionalSummary = async (professionalSummary) => {
-      setIsUpdating(true);
-      const response = await fetch(
-        `${API_URL}/professionalsummary/${professionalSummary._id}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify(professionalSummary),
-        }
-      );
-      const data = await response.json();
-      setIsUpdating(false);
-      return data;
+      return updateEntity("professionalsummary", professionalSummary);
     };
-    const timeoutId = setTimeout(
-      () => updateProfessionalSummary(professionalSummary),
-      2000
+    const timeoutId = _setTimeout(
+      updateProfessionalSummary,
+      professionalSummary
     );
     return () => clearTimeout(timeoutId);
   }, [professionalSummary]);
 
   const fetchCvById = async (cvId) => {
-    const response = await fetch(`${API_URL}/edit/cv/${cvId}`, {
+    const response = await fetch(`${API_URL}/cv/edit/${cvId}`, {
       credentials: "include",
     });
     const data = await response.json();
     return data;
+  };
+
+  const updateEntity = async (entityName, entity) => {
+    setIsUpdating(true);
+    const response = await fetch(`${API_URL}/${entityName}/${entity._id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(entity),
+    });
+    const data = await response.json();
+    setIsUpdating(false);
+    return data;
+  };
+
+  const _setTimeout = (updateFunction, entity) => {
+    const timeoutId = setTimeout(() => updateFunction(entity), 1500);
+    return timeoutId;
   };
 
   // fetch all the employement history and then we get the (count())
