@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -39,14 +39,13 @@ const useStyles = makeStyles((theme) => ({
 
 const EditCV = () => {
   const classes = useStyles();
-  const location = useLocation();
 
   const [employmentIdToBeDeleted, setEmploymentIdToBeDeleted] = useState(0);
   const [hasDeletedEntry, setHasDeletedEntry] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const [employmentHistory, setEmploymentHistory] = useState([]);
+  const [employmentList, setEmploymentList] = useState([]);
   const [professionalSummary, setProfessionalSummary] = useState(null);
   const [personalDetails, setPersonalDetails] = useState({
     jobTitle: "",
@@ -58,11 +57,14 @@ const EditCV = () => {
     phone: "",
   });
 
+  const { cvId } = useParams();
+
   useEffect(() => {
     const getCvById = async () => {
-      const data = await fetchCvById(location.state.cvId);
+      const data = await fetchCvById(cvId);
       setPersonalDetails(data.personalDetails);
       setProfessionalSummary(data.professionalSummary);
+      setEmploymentList(data.employmentList);
     };
     getCvById();
     setIsLoading(false);
@@ -103,6 +105,7 @@ const EditCV = () => {
         "Content-type": "application/json",
       },
       body: JSON.stringify(entity),
+      credentials: "include",
     });
     const data = await response.json();
     setIsUpdating(false);
@@ -114,30 +117,17 @@ const EditCV = () => {
     return timeoutId;
   };
 
-  // fetch all the employement history and then we get the (count())
-  // after that render employment experience according to count()
-  // const deleteEmployment = (employmentId) => {
-  //   setEmploymentList(
-  //     employmentList.filter((employment) => employment.id !== employmentId)
-  //   );
-  //   setEmploymentIdToBeDeleted(0);
-  //   setHasDeletedEntry(true);
-  // };
-
-  // const addEmployment = async () => {
-  //   setEmploymentList([
-  //     ...employmentList,
-  //     {
-  //       id: Math.floor(Math.random() * 10000) + 1,
-  //       jobtitle: "asdassd",
-  //       employer: "asdasd",
-  //       startdate: "324324",
-  //       enddate: "3434",
-  //       city: "asdad",
-  //       description: "asdad",
-  //     },
-  //   ]);
-  // };
+  const deleteEmployment = async (employmentId) => {
+    await fetch(`${API_URL}/employment/${employmentId}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+    setEmploymentList(
+      employmentList.filter((employment) => employment._id !== employmentId)
+    );
+    setEmploymentIdToBeDeleted(0);
+    setHasDeletedEntry(true);
+  };
 
   if (!isLoading) {
     return (
@@ -147,12 +137,11 @@ const EditCV = () => {
         {hasDeletedEntry && (
           <Snackbar setHasDeletedEntry={setHasDeletedEntry} />
         )}
-        {employmentIdToBeDeleted > 0 && (
+        {employmentIdToBeDeleted !== 0 && (
           <AlertDialogSlide
             title={"Delete Entry"}
             contentText={"Are you sure you want to delete this entry?"}
-            //handleConfirm={() => deleteEmployment(employmentIdToBeDeleted)}
-            handleConfirm={() => {}}
+            handleConfirm={() => deleteEmployment(employmentIdToBeDeleted)}
             handleClose={() => setEmploymentIdToBeDeleted(0)}
           />
         )}
@@ -184,6 +173,7 @@ const EditCV = () => {
                 personalDetails={personalDetails}
                 setPersonalDetails={setPersonalDetails}
               />
+
               <Box mt={10} />
               <ProfessionalSummary
                 professionalSummary={professionalSummary}
@@ -191,9 +181,10 @@ const EditCV = () => {
               />
               <Box mt={10} />
               <EmploymentHistory
-                employmentList={[]}
-                addEmployment={() => {}}
-                setEmploymentIdToBeDeleted={() => {}}
+                employmentList={employmentList}
+                setEmploymentList={setEmploymentList}
+                setEmploymentIdToBeDeleted={setEmploymentIdToBeDeleted}
+                setIsUpdating={setIsUpdating}
               />
             </React.Fragment>
           </Grid>

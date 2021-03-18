@@ -5,6 +5,7 @@ import Container from "@material-ui/core/Container";
 import AddIcon from "@material-ui/icons/Add";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
+import Link from "@material-ui/core/Link";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
@@ -44,7 +45,6 @@ const Dashboard = () => {
   const classes = useStyles();
   const [cvs, setCvs] = useState([]);
   const { push } = useHistory();
-  //const API_URL = "http://localhost:5001/api";
 
   /* Put some image showing that there are no CVs (in case theres 0)*/
   useEffect(() => {
@@ -118,8 +118,8 @@ const Dashboard = () => {
       </div>
       <Container className={classes.cardGrid} maxWidth="md">
         <Grid container spacing={4}>
-          {cvs.map((card) => (
-            <Grid item key={card} xs={12} sm={6} md={4}>
+          {cvs.map((cv) => (
+            <Grid item key={cv} xs={12} sm={6} md={4}>
               <Card className={classes.card}>
                 <CardMedia
                   className={classes.cardMedia}
@@ -136,7 +136,11 @@ const Dashboard = () => {
                   </Typography>
                 </CardContent>
                 <CardActions>
-                  <Button size="small" color="primary">
+                  <Button
+                    size="small"
+                    color="primary"
+                    onClick={() => push(`/cv/edit/${cv._id}`)}
+                  >
                     Edit
                   </Button>
                   <Button size="small" color="primary">

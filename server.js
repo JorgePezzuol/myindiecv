@@ -15,21 +15,47 @@ mongoose.connect(process.env.DATABASE_ACCESS, {
 });
 mongoose.set("useFindAndModify", false);
 
-app.use(
-  cors({
-    origin: [
-      `${process.env.FRONT_END_URL}`,
-      "http://localhost:3000, http://localhost:5000",
-    ],
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: [
+//       `${process.env.FRONT_END_URL}`,
+//       "http://localhost:3000, http://localhost:5000",
+//     ],
+//     credentials: false,
+//   })
+// );
+
+// Add headers
+app.use(function (req, res, next) {
+  // Website you wish to allow to connect
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+
+  // Request methods you wish to allow
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  );
+
+  // Request headers you wish to allow
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With,content-type"
+  );
+
+  // Set to true if you need the website to include cookies in the requests sent
+  // to the API (e.g. in case you use sessions)
+  res.setHeader("Access-Control-Allow-Credentials", true);
+
+  // Pass to next layer of middleware
+  next();
+});
 
 // remember to put /api before all
 app.use(require("./server/routes/AuthRoutes"));
 app.use(require("./server/routes/UserRoutes"));
 app.use(require("./server/routes/PersonalDetailsRoutes"));
 app.use(require("./server/routes/ProfessionalSummaryRoutes"));
+app.use(require("./server/routes/EmploymentRoutes"));
 app.use(require("./server/routes/CVRoutes"));
 
 if (process.env.NODE_ENV === "production") {

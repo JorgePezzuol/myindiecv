@@ -56,8 +56,9 @@ GET http://localhost:5001/professionalsummary/604e53c9635db508b9216c35
 
 ###
 
-POST http://localhost:5001/create/bunda
+POST http://localhost:5001/api/employment/6052c5c84f73323def3fff44/create
 Content-Type: application/json
 
 {
+    
 }

@@ -15,7 +15,7 @@ const PersonalDetail = ({ personalDetails, setPersonalDetails }) => {
       <Grid item xs={12} sm={6}>
         <TextField
           label="Job Title"
-          variant="filled"
+          variant="outlined"
           placeholder="e.g. Web Developer"
           style={{ marginBottom: 20 }}
           size="small"
@@ -32,7 +32,7 @@ const PersonalDetail = ({ personalDetails, setPersonalDetails }) => {
       <Grid item xs={12} sm={6}>
         <TextField
           label="Email"
-          variant="filled"
+          variant="outlined"
           style={{ marginBottom: 20 }}
           size="small"
           fullWidth
@@ -48,7 +48,7 @@ const PersonalDetail = ({ personalDetails, setPersonalDetails }) => {
       <Grid item xs={12} sm={6}>
         <TextField
           label="First Name"
-          variant="filled"
+          variant="outlined"
           style={{ marginBottom: 20 }}
           size="small"
           fullWidth
@@ -64,7 +64,7 @@ const PersonalDetail = ({ personalDetails, setPersonalDetails }) => {
       <Grid item xs={12} sm={6}>
         <TextField
           label="Last Name"
-          variant="filled"
+          variant="outlined"
           style={{ marginBottom: 20 }}
           size="small"
           fullWidth
@@ -80,7 +80,7 @@ const PersonalDetail = ({ personalDetails, setPersonalDetails }) => {
       <Grid item xs={12} sm={6}>
         <TextField
           label="Phone"
-          variant="filled"
+          variant="outlined"
           size="small"
           fullWidth
           onChange={(e) =>

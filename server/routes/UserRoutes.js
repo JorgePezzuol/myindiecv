@@ -48,9 +48,9 @@ app.post("/login", async (req, res) => {
         expiresIn: "7d",
       });
       res.cookie("token", token, {
-        secure: process.env.NODE_ENV === "production" ? true : false,
-        httpOnly: true,
-        sameSite: true,
+        secure: process.env.NODE_ENV === "production" ? false : false,
+        httpOnly: false,
+        sameSite: false,
       });
       console.log(user.toJSON());
       res.status(200).send(user.toJSON());

@@ -15,7 +15,7 @@ function App() {
         <Route component={Signin} exact path="/login" />
         <PrivateRoute component={Signin} path="/profile" exact />
         <Route component={Dashboard} exact path="/dashboard" />
-        <Route component={EditCV} exact path="/cv/edit/:id" />
+        <Route component={EditCV} exact path="/cv/edit/:cvId" />
         <Route component={Signup} exact path="/signup" />
       </Switch>
     </Router>

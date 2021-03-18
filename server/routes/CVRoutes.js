@@ -2,6 +2,7 @@ const express = require("express");
 const cvModel = require("../models/CvModel");
 const personalDetailsModel = require("../models/PersonalDetailsModel");
 const professionalSummaryModel = require("../models/ProfessionalSummaryModel");
+const employmentModel = require("../models/EmploymentModel");
 const auth = require("../auth/auth");
 const jwt = require("jsonwebtoken");
 const app = express();
@@ -27,8 +28,6 @@ app.get("/api/cv/edit/:cvId", async (req, res) => {
       }
     );
 
-    // console.log(cv.user.toString());
-    // console.log(userId);
     if (cv.user.toString() !== userId) {
       return res.status(401).send(err);
     }
@@ -39,10 +38,13 @@ app.get("/api/cv/edit/:cvId", async (req, res) => {
     const professionalSummary = await professionalSummaryModel.findOne({
       cv: ObjectId(req.params.cvId),
     });
-
+    const employmentList = await employmentModel.find({
+      cv: ObjectId(req.params.cvId),
+    });
     res.send({
       personalDetails: personalDetails,
       professionalSummary: professionalSummary,
+      employmentList: employmentList,
     });
   } catch (err) {
     res.status(500).send(err);
