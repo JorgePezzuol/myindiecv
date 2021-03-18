@@ -30,7 +30,7 @@ app.use(require("./server/routes/AuthRoutes"));
 app.use(require("./server/routes/UserRoutes"));
 app.use(require("./server/routes/PersonalDetailsRoutes"));
 app.use(require("./server/routes/ProfessionalSummaryRoutes"));
-app.use(require("./server/routes/CvRoutes"));
+app.use(require("./server/routes/CVRoutes"));
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "client", "build")));
