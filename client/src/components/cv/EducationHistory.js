@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
@@ -7,8 +7,14 @@ import { API_URL } from "../../utils/utils";
 import Snackbar from "../../components/utils/SnackBar";
 import AddExperience from "../../components/cv/AddExperience";
 
-const EducationHistory = ({ educationList, setEducationList }) => {
+const EducationHistory = ({ initialValue }) => {
+  const [educationList, setEducationList] = useState(initialValue);
   const [hasDeleted, sethasDeleted] = useState(false);
+
+  useEffect(() => {
+    setEducationList(initialValue);
+  }, [initialValue]);
+
   const handleDelete = async (educationId) => {
     await fetch(`${API_URL}/education/${educationId}`, {
       method: "DELETE",

@@ -12,13 +12,12 @@ import RichTextEditor from "./RichTextEditor";
 import { API_URL } from "../../utils/utils";
 import AlertDialogSlide from "../../components/utils/AlertDialogSlide";
 
-const Employment = ({ attributes, setIsUpdating, handleDelete }) => {
+const Employment = ({ attributes, handleDelete }) => {
   const [employment, setEmployment] = useState(attributes);
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     const updateEmployment = async (employment) => {
-      setIsUpdating(true);
       const response = await fetch(`${API_URL}/employment/${employment._id}`, {
         method: "PATCH",
         headers: {
@@ -27,7 +26,6 @@ const Employment = ({ attributes, setIsUpdating, handleDelete }) => {
         body: JSON.stringify(employment),
       });
       const data = await response.json();
-      setIsUpdating(false);
       return data;
     };
     const timeoutId = setTimeout(() => updateEmployment(employment), 1500);

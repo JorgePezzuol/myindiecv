@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
@@ -7,12 +7,14 @@ import { API_URL } from "../../utils/utils";
 import Snackbar from "../../components/utils/SnackBar";
 import AddExperience from "../../components/cv/AddExperience";
 
-const EmploymentHistory = ({
-  employmentList,
-  setEmploymentList,
-  setIsUpdating,
-}) => {
+const EmploymentHistory = ({ initialValue }) => {
   const [hasDeleted, sethasDeleted] = useState(false);
+
+  const [employmentList, setEmploymentList] = useState(initialValue);
+
+  useEffect(() => {
+    setEmploymentList(initialValue);
+  }, [initialValue]);
 
   const handleDelete = async (employmentId) => {
     await fetch(`${API_URL}/employment/${employmentId}`, {
@@ -41,7 +43,6 @@ const EmploymentHistory = ({
         <Employement
           handleDelete={handleDelete}
           attributes={employment}
-          setIsUpdating={setIsUpdating}
           key={index}
         />
       ))}

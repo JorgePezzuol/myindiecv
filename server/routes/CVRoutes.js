@@ -48,6 +48,7 @@ app.get("/api/cv/edit/:cvId", async (req, res) => {
     });
 
     res.send({
+      name: cv.name,
       personalDetails: personalDetails,
       professionalSummary: professionalSummary,
       employmentList: employmentList,
