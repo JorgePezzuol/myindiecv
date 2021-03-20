@@ -1,29 +1,23 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import SessionAppBar from "../../components/auth/SessionAppBar";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
-import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
 import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
 import DescriptionIcon from "@material-ui/icons/Description";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import PersonalDetail from "../../components/cv/PersonalDetail";
 import ProfessionalSummary from "../../components/cv/ProfessionalSummary";
 import EmploymentHistory from "../../components/cv/EmploymentHistory";
-import AlertDialogSlide from "../../components/utils/AlertDialogSlide";
-import Snackbar from "../../components/utils/SnackBar";
-import _ from "lodash";
-import { API_URL } from "../../utils/utils";
+import EducationHistory from "../../components/cv/EducationHistory";
+import { fetchCvById, updateEntity, setDelay } from "../../services/CvService";
 
 const useStyles = makeStyles((theme) => ({
   heroContent: {
@@ -37,15 +31,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EditCV = () => {
+const Edit = () => {
   const classes = useStyles();
 
-  const [employmentIdToBeDeleted, setEmploymentIdToBeDeleted] = useState(0);
-  const [hasDeletedEntry, setHasDeletedEntry] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
 
   const [employmentList, setEmploymentList] = useState([]);
+  const [educationList, setEducationList] = useState([]);
   const [professionalSummary, setProfessionalSummary] = useState(null);
   const [personalDetails, setPersonalDetails] = useState({
     jobTitle: "",
@@ -65,16 +58,19 @@ const EditCV = () => {
       setPersonalDetails(data.personalDetails);
       setProfessionalSummary(data.professionalSummary);
       setEmploymentList(data.employmentList);
+      setEducationList(data.educationList);
     };
     getCvById();
     setIsLoading(false);
   }, []);
 
   useEffect(() => {
+    setIsUpdating(true);
     const updatePersonalDetails = async (personalDetails) => {
       return updateEntity("personaldetails", personalDetails);
     };
-    const timeoutId = _setTimeout(updatePersonalDetails, personalDetails);
+    const timeoutId = setDelay(updatePersonalDetails, personalDetails);
+    setIsUpdating(false);
     return () => clearTimeout(timeoutId);
   }, [personalDetails]);
 
@@ -82,69 +78,15 @@ const EditCV = () => {
     const updateProfessionalSummary = async (professionalSummary) => {
       return updateEntity("professionalsummary", professionalSummary);
     };
-    const timeoutId = _setTimeout(
-      updateProfessionalSummary,
-      professionalSummary
-    );
+    const timeoutId = setDelay(updateProfessionalSummary, professionalSummary);
     return () => clearTimeout(timeoutId);
   }, [professionalSummary]);
-
-  const fetchCvById = async (cvId) => {
-    const response = await fetch(`${API_URL}/cv/edit/${cvId}`, {
-      credentials: "include",
-    });
-    const data = await response.json();
-    return data;
-  };
-
-  const updateEntity = async (entityName, entity) => {
-    setIsUpdating(true);
-    const response = await fetch(`${API_URL}/${entityName}/${entity._id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(entity),
-      credentials: "include",
-    });
-    const data = await response.json();
-    setIsUpdating(false);
-    return data;
-  };
-
-  const _setTimeout = (updateFunction, entity) => {
-    const timeoutId = setTimeout(() => updateFunction(entity), 1500);
-    return timeoutId;
-  };
-
-  const deleteEmployment = async (employmentId) => {
-    await fetch(`${API_URL}/employment/${employmentId}`, {
-      method: "DELETE",
-      credentials: "include",
-    });
-    setEmploymentList(
-      employmentList.filter((employment) => employment._id !== employmentId)
-    );
-    setEmploymentIdToBeDeleted(0);
-    setHasDeletedEntry(true);
-  };
 
   if (!isLoading) {
     return (
       <React.Fragment>
         <CssBaseline />
         <SessionAppBar />
-        {hasDeletedEntry && (
-          <Snackbar setHasDeletedEntry={setHasDeletedEntry} />
-        )}
-        {employmentIdToBeDeleted !== 0 && (
-          <AlertDialogSlide
-            title={"Delete Entry"}
-            contentText={"Are you sure you want to delete this entry?"}
-            handleConfirm={() => deleteEmployment(employmentIdToBeDeleted)}
-            handleClose={() => setEmploymentIdToBeDeleted(0)}
-          />
-        )}
         <div className={classes.heroContent}>
           <Container maxWidth="sm">
             <Typography
@@ -173,17 +115,18 @@ const EditCV = () => {
                 personalDetails={personalDetails}
                 setPersonalDetails={setPersonalDetails}
               />
-
-              <Box mt={10} />
               <ProfessionalSummary
                 professionalSummary={professionalSummary}
                 setProfessionalSummary={setProfessionalSummary}
               />
-              <Box mt={10} />
               <EmploymentHistory
                 employmentList={employmentList}
                 setEmploymentList={setEmploymentList}
-                setEmploymentIdToBeDeleted={setEmploymentIdToBeDeleted}
+                setIsUpdating={setIsUpdating}
+              />
+              <EducationHistory
+                educationList={educationList}
+                setEducationList={setEducationList}
                 setIsUpdating={setIsUpdating}
               />
             </React.Fragment>
@@ -196,7 +139,7 @@ const EditCV = () => {
             aria-label="add"
             className={classes.fab}
           >
-            <b>Preview & Download</b>
+            <strong>Preview & Download</strong>
             <Box ml={1}>
               {isUpdating ? (
                 // CHECK THIS ERROR !!!
@@ -214,4 +157,4 @@ const EditCV = () => {
   }
 };
 
-export default EditCV;
+export default Edit;

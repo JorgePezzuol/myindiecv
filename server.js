@@ -56,7 +56,8 @@ app.use(require("./server/routes/UserRoutes"));
 app.use(require("./server/routes/PersonalDetailsRoutes"));
 app.use(require("./server/routes/ProfessionalSummaryRoutes"));
 app.use(require("./server/routes/EmploymentRoutes"));
-app.use(require("./server/routes/CVRoutes"));
+app.use(require("./server/routes/EducationRoutes"));
+app.use(require("./server/routes/CvRoutes"));
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "client", "build")));

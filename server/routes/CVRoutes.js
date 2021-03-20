@@ -3,6 +3,7 @@ const cvModel = require("../models/CvModel");
 const personalDetailsModel = require("../models/PersonalDetailsModel");
 const professionalSummaryModel = require("../models/ProfessionalSummaryModel");
 const employmentModel = require("../models/EmploymentModel");
+const educationModel = require("../models/EducationModel");
 const auth = require("../auth/auth");
 const jwt = require("jsonwebtoken");
 const app = express();
@@ -28,9 +29,9 @@ app.get("/api/cv/edit/:cvId", async (req, res) => {
       }
     );
 
-    if (cv.user.toString() !== userId) {
-      return res.status(401).send(err);
-    }
+    // if (cv.user.toString() !== userId) {
+    //   return res.status(401).send(err);
+    // }
 
     const personalDetails = await personalDetailsModel.findOne({
       cv: ObjectId(req.params.cvId),
@@ -38,15 +39,22 @@ app.get("/api/cv/edit/:cvId", async (req, res) => {
     const professionalSummary = await professionalSummaryModel.findOne({
       cv: ObjectId(req.params.cvId),
     });
+
+    const educationList = await educationModel.find({
+      cv: ObjectId(req.params.cvId),
+    });
     const employmentList = await employmentModel.find({
       cv: ObjectId(req.params.cvId),
     });
+
     res.send({
       personalDetails: personalDetails,
       professionalSummary: professionalSummary,
       employmentList: employmentList,
+      educationList: educationList,
     });
   } catch (err) {
+    console.log(err);
     res.status(500).send(err);
   }
 });

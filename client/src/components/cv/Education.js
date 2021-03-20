@@ -12,27 +12,27 @@ import RichTextEditor from "./RichTextEditor";
 import { API_URL } from "../../utils/utils";
 import AlertDialogSlide from "../../components/utils/AlertDialogSlide";
 
-const Employment = ({ attributes, setIsUpdating, handleDelete }) => {
-  const [employment, setEmployment] = useState(attributes);
+const Education = ({ attributes, setIsUpdating, handleDelete }) => {
+  const [education, setEducation] = useState(attributes);
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    const updateEmployment = async (employment) => {
+    const updateEducation = async (education) => {
       setIsUpdating(true);
-      const response = await fetch(`${API_URL}/employment/${employment._id}`, {
+      const response = await fetch(`${API_URL}/education/${education._id}`, {
         method: "PATCH",
         headers: {
           "Content-type": "application/json",
         },
-        body: JSON.stringify(employment),
+        body: JSON.stringify(education),
       });
       const data = await response.json();
       setIsUpdating(false);
       return data;
     };
-    const timeoutId = setTimeout(() => updateEmployment(employment), 1500);
+    const timeoutId = setTimeout(() => updateEducation(education), 1500);
     return () => clearTimeout(timeoutId);
-  }, [employment]);
+  }, [education]);
 
   return (
     <Grid container spacing={2}>
@@ -40,7 +40,7 @@ const Employment = ({ attributes, setIsUpdating, handleDelete }) => {
         <AlertDialogSlide
           title={"Delete Entry"}
           contentText={"Are you sure you want to delete this entry?"}
-          handleConfirm={() => handleDelete(employment._id)}
+          handleConfirm={() => handleDelete(education._id)}
           handleClose={() => setIsDeleting(false)}
         />
       )}
@@ -52,42 +52,42 @@ const Employment = ({ attributes, setIsUpdating, handleDelete }) => {
             id="panel1a-header"
           >
             <Typography>
-              {employment.jobTitle}
+              {education.school} - {education.degree}
               <br />
-              {new Date(employment.startDate).toLocaleDateString()} -{" "}
-              {new Date(employment.endDate).toLocaleDateString()}
+              {new Date(education.startDate).toLocaleDateString()} -{" "}
+              {new Date(education.endDate).toLocaleDateString()}
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  label="Job Title"
+                  label="School"
                   variant="outlined"
                   size="small"
                   fullWidth
                   onChange={(e) =>
-                    setEmployment({
-                      ...employment,
-                      jobTitle: e.target.value,
+                    setEducation({
+                      ...education,
+                      school: e.target.value,
                     })
                   }
-                  value={employment.jobTitle}
+                  value={education.school}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  label="Employer"
+                  label="Degree"
                   variant="outlined"
                   size="small"
                   fullWidth
                   onChange={(e) =>
-                    setEmployment({
-                      ...employment,
-                      employer: e.target.value,
+                    setEducation({
+                      ...education,
+                      degree: e.target.value,
                     })
                   }
-                  value={employment.employer}
+                  value={education.degree}
                 />
               </Grid>
               <Grid item xs={6} sm={3}>
@@ -102,12 +102,12 @@ const Employment = ({ attributes, setIsUpdating, handleDelete }) => {
                     shrink: true,
                   }}
                   onChange={(e) =>
-                    setEmployment({
-                      ...employment,
+                    setEducation({
+                      ...education,
                       startDate: e.target.value,
                     })
                   }
-                  value={employment.startDate}
+                  value={education.startDate}
                 />
               </Grid>
               <Grid item xs={6} sm={3}>
@@ -122,12 +122,12 @@ const Employment = ({ attributes, setIsUpdating, handleDelete }) => {
                     shrink: true,
                   }}
                   onChange={(e) =>
-                    setEmployment({
-                      ...employment,
+                    setEducation({
+                      ...education,
                       endDate: e.target.value,
                     })
                   }
-                  value={employment.endDate}
+                  value={education.endDate}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -137,17 +137,17 @@ const Employment = ({ attributes, setIsUpdating, handleDelete }) => {
                   size="small"
                   fullWidth
                   onChange={(e) =>
-                    setEmployment({
-                      ...employment,
+                    setEducation({
+                      ...education,
                       city: e.target.value,
                     })
                   }
-                  value={employment.city}
+                  value={education.city}
                 />
               </Grid>
               <Grid item xs={12} sm={12}>
                 <Typography>Description</Typography>
-                <RichTextEditor object={employment} setObject={setEmployment} />
+                <RichTextEditor object={education} setObject={setEducation} />
               </Grid>
             </Grid>
           </AccordionDetails>
@@ -162,4 +162,4 @@ const Employment = ({ attributes, setIsUpdating, handleDelete }) => {
   );
 };
 
-export default Employment;
+export default Education;
