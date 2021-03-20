@@ -7,11 +7,7 @@ import { API_URL } from "../../utils/utils";
 import Snackbar from "../../components/utils/SnackBar";
 import AddExperience from "../../components/cv/AddExperience";
 
-const EducationHistory = ({
-  educationList,
-  setEducationList,
-  setIsUpdating,
-}) => {
+const EducationHistory = ({ educationList, setEducationList }) => {
   const [hasDeleted, sethasDeleted] = useState(false);
   const handleDelete = async (educationId) => {
     await fetch(`${API_URL}/education/${educationId}`, {
@@ -40,7 +36,6 @@ const EducationHistory = ({
         <Education
           handleDelete={handleDelete}
           attributes={education}
-          setIsUpdating={setIsUpdating}
           key={index}
         />
       ))}

@@ -1,10 +1,25 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 
-const PersonalDetail = ({ personalDetails, setPersonalDetails }) => {
+import { updateEntity, setDelay } from "../../services/CvService";
+
+const PersonalDetail = ({ initialValue }) => {
+  const [personalDetails, setPersonalDetails] = useState({ ...initialValue });
+
+  useEffect(() => {
+    setPersonalDetails({ ...initialValue });
+  }, [initialValue]);
+
+  useEffect(() => {
+    const updatePersonalDetails = async (personalDetails) => {
+      return updateEntity("personaldetails", personalDetails);
+    };
+    const timeoutId = setDelay(updatePersonalDetails, personalDetails);
+    return () => clearTimeout(timeoutId);
+  }, [personalDetails]);
+
   return (
     <React.Fragment>
       <Grid item xs={12} sm={12}>

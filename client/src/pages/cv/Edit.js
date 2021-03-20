@@ -36,6 +36,9 @@ const Edit = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [cv, setCv] = useState({
+    personalDetails: {},
+  });
 
   const [employmentList, setEmploymentList] = useState([]);
   const [educationList, setEducationList] = useState([]);
@@ -59,20 +62,11 @@ const Edit = () => {
       setProfessionalSummary(data.professionalSummary);
       setEmploymentList(data.employmentList);
       setEducationList(data.educationList);
+      setCv(data);
     };
     getCvById();
     setIsLoading(false);
   }, []);
-
-  useEffect(() => {
-    setIsUpdating(true);
-    const updatePersonalDetails = async (personalDetails) => {
-      return updateEntity("personaldetails", personalDetails);
-    };
-    const timeoutId = setDelay(updatePersonalDetails, personalDetails);
-    setIsUpdating(false);
-    return () => clearTimeout(timeoutId);
-  }, [personalDetails]);
 
   useEffect(() => {
     const updateProfessionalSummary = async (professionalSummary) => {
@@ -112,8 +106,8 @@ const Edit = () => {
           <Grid container spacing={2}>
             <React.Fragment>
               <PersonalDetail
-                personalDetails={personalDetails}
-                setPersonalDetails={setPersonalDetails}
+                initialValue={personalDetails}
+                setIsUpdating={setIsUpdating}
               />
               <ProfessionalSummary
                 professionalSummary={professionalSummary}
