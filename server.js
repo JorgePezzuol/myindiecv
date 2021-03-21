@@ -50,6 +50,10 @@ app.use(function (req, res, next) {
   next();
 });
 
+// links related to pdf generator (puppeteer)
+// https://github.com/marcbachmann/node-html-pdf/issues/49
+// https://www.youtube.com/watch?v=azOE6wH-cok&ab_channel=RaddyTheBrand
+
 // remember to put /api before all
 app.use(require("./server/routes/AuthRoutes"));
 app.use(require("./server/routes/UserRoutes"));
@@ -57,6 +61,9 @@ app.use(require("./server/routes/PersonalDetailsRoutes"));
 app.use(require("./server/routes/ProfessionalSummaryRoutes"));
 app.use(require("./server/routes/EmploymentRoutes"));
 app.use(require("./server/routes/EducationRoutes"));
+app.use(require("./server/routes/LinksRoutes"));
+app.use(require("./server/routes/LanguageRoutes"));
+app.use(require("./server/routes/SkillRoutes"));
 app.use(require("./server/routes/CvRoutes"));
 
 if (process.env.NODE_ENV === "production") {

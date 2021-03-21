@@ -3,7 +3,7 @@ import AddIcon from "@material-ui/icons/Add";
 import { API_URL } from "../../utils/utils";
 import { useParams } from "react-router-dom";
 
-const AddExperience = ({ entityName, setEntityList, entityList }) => {
+const AddExperience = ({ entityName, handleAdd }) => {
   const { cvId } = useParams();
   return (
     <Button
@@ -20,7 +20,7 @@ const AddExperience = ({ entityName, setEntityList, entityList }) => {
           }
         );
         const data = await response.json();
-        setEntityList([...entityList, data]);
+        handleAdd(data);
       }}
     >
       <b>Add {entityName}</b>

@@ -27,6 +27,10 @@ const EmploymentHistory = ({ initialValue }) => {
     sethasDeleted(true);
   };
 
+  const handleAdd = (newEmployment) => {
+    setEmploymentList([...employmentList, newEmployment]);
+  };
+
   return (
     <Grid item xs={12} sm={12}>
       {hasDeleted && (
@@ -47,11 +51,7 @@ const EmploymentHistory = ({ initialValue }) => {
         />
       ))}
       <Box mt={1} />
-      <AddExperience
-        entityName={"employment"}
-        setEntityList={setEmploymentList}
-        entityList={employmentList}
-      />
+      <AddExperience entityName={"employment"} handleAdd={handleAdd} />
     </Grid>
   );
 };

@@ -2,8 +2,11 @@ const express = require("express");
 const cvModel = require("../models/CvModel");
 const personalDetailsModel = require("../models/PersonalDetailsModel");
 const professionalSummaryModel = require("../models/ProfessionalSummaryModel");
+const linksModel = require("../models/LinksModel");
 const employmentModel = require("../models/EmploymentModel");
 const educationModel = require("../models/EducationModel");
+const languageModel = require("../models/LanguageModel");
+const skillModel = require("../models/SkillModel");
 const auth = require("../auth/auth");
 const jwt = require("jsonwebtoken");
 const app = express();
@@ -39,11 +42,19 @@ app.get("/api/cv/edit/:cvId", async (req, res) => {
     const professionalSummary = await professionalSummaryModel.findOne({
       cv: ObjectId(req.params.cvId),
     });
-
     const educationList = await educationModel.find({
       cv: ObjectId(req.params.cvId),
     });
     const employmentList = await employmentModel.find({
+      cv: ObjectId(req.params.cvId),
+    });
+    const socialLinksList = await linksModel.find({
+      cv: ObjectId(req.params.cvId),
+    });
+    const languageList = await languageModel.find({
+      cv: ObjectId(req.params.cvId),
+    });
+    const skillList = await skillModel.find({
       cv: ObjectId(req.params.cvId),
     });
 
@@ -53,6 +64,9 @@ app.get("/api/cv/edit/:cvId", async (req, res) => {
       professionalSummary: professionalSummary,
       employmentList: employmentList,
       educationList: educationList,
+      socialLinksList: socialLinksList,
+      languageList: languageList,
+      skillList: skillList,
     });
   } catch (err) {
     console.log(err);
@@ -81,9 +95,6 @@ app.get("/api/cv/user", async (req, res) => {
   }
 });
 
-// CREATE CV AND RETURN THE OBJECTID
-// DONT FORGOT TO CREATE ALL THE NECESSARY COLLECTIONS
-// personal details, professional summaries, etc
 app.post("/api/cv/create", async (req, res) => {
   try {
     let userId = 0;

@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { useHistory } from "react-router-dom";
+
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -11,19 +14,9 @@ import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import { useHistory } from "react-router-dom";
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://www.linkedin.com/in/jorge-pezzuol/">
-        Jorge Pezzuol
-      </Link>
-    </Typography>
-  );
-}
+import Copyright from "../components/Copyright";
+import { API_URL } from "../utils/utils";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,6 +54,9 @@ const useStyles = makeStyles((theme) => ({
 const Signin = () => {
   const classes = useStyles();
   const { push } = useHistory();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const fetchToken = async () => {
     const response = await fetch("/login", {
@@ -104,23 +100,21 @@ const Signin = () => {
               margin="normal"
               required
               fullWidth
-              id="email"
               label="Email Address"
-              name="email"
-              autoComplete="email"
               type="email"
               autoFocus
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <TextField
               variant="outlined"
               margin="normal"
               required
               fullWidth
-              name="password"
               label="Password"
               type="password"
-              id="password"
-              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}

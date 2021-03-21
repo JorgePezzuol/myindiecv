@@ -26,6 +26,10 @@ const EducationHistory = ({ initialValue }) => {
     sethasDeleted(true);
   };
 
+  const handleAdd = (newEducation) => {
+    setEducationList([...educationList, newEducation]);
+  };
+
   return (
     <Grid item xs={12} sm={12}>
       {hasDeleted && (
@@ -35,8 +39,8 @@ const EducationHistory = ({ initialValue }) => {
         Education
       </Typography>
       <Typography variant="subtitle2" color="textSecondary" paragraph>
-        Include your last 10 years of relevant experience and dates in this
-        section. List your most recent position first.
+        If relevant, include your most recent educational achievements and the
+        dates here
       </Typography>
       {educationList.map((education, index) => (
         <Education
@@ -46,11 +50,7 @@ const EducationHistory = ({ initialValue }) => {
         />
       ))}
       <Box mt={1} />
-      <AddExperience
-        entityName={"education"}
-        setEntityList={setEducationList}
-        entityList={educationList}
-      />
+      <AddExperience entityName={"education"} handleAdd={handleAdd} />
     </Grid>
   );
 };
