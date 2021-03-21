@@ -25,6 +25,7 @@ const PickableSkills = ({ initialValue }) => {
     "Python",
     "Golang",
     "Laravel",
+    "Java",
     "Symfony",
     "Javascript",
     "MySQL",

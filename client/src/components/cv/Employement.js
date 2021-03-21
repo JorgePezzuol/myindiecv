@@ -92,7 +92,7 @@ const Employment = ({ attributes, handleDelete }) => {
                 <TextField
                   id="date"
                   variant="outlined"
-                  label="Birthday"
+                  label="Start"
                   type="date"
                   size="small"
                   fullWidth
@@ -112,7 +112,7 @@ const Employment = ({ attributes, handleDelete }) => {
                 <TextField
                   id="date"
                   variant="outlined"
-                  label="Birthday"
+                  label="End"
                   type="date"
                   size="small"
                   fullWidth
