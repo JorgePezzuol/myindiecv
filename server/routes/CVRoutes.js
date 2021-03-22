@@ -9,6 +9,7 @@ const languageModel = require("../models/LanguageModel");
 const skillModel = require("../models/SkillModel");
 const auth = require("../auth/auth");
 const jwt = require("jsonwebtoken");
+const puppeteer = require("puppeteer");
 const app = express();
 const { ObjectId } = require("mongodb");
 const dotenv = require("dotenv");
@@ -137,6 +138,26 @@ app.post("/api/cv/create", async (req, res) => {
   } catch (err) {
     res.status(500).send(err);
   }
+});
+
+app.get("/api/export/pdf", (req, res) => {
+  (async () => {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.goto("http://localhost:3000/preview", {
+      waitUntil: ["domcontentloaded", "load", "networkidle0"],
+    });
+
+    const buffer = await page.pdf({
+      printBackground: true,
+      format: "a3",
+      PreferCSSPageSize: true,
+    });
+
+    res.type("application/pdf");
+    res.send(buffer);
+    await browser.close();
+  })();
 });
 
 module.exports = app;

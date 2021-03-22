@@ -5,8 +5,6 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const app = express();
 
-const puppeteer = require("puppeteer");
-
 app.use(express.json());
 app.use(cookieParser());
 
@@ -67,40 +65,6 @@ app.use(require("./server/routes/LinksRoutes"));
 app.use(require("./server/routes/LanguageRoutes"));
 app.use(require("./server/routes/SkillRoutes"));
 app.use(require("./server/routes/CvRoutes"));
-
-app.get("/export/pdf", (req, res) => {
-  (async () => {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await page.goto("http://localhost:3000/preview", {
-      waitUntil: ["domcontentloaded", "load", "networkidle0"],
-    });
-
-    //const buffer = await page.pdf({ path: "hn.pdf", format: "a3" });
-    const buffer = await page.pdf({
-      printBackground: true,
-      format: "a3",
-      PreferCSSPageSize: true,
-    });
-
-    res.type("application/pdf");
-    res.send(buffer);
-    await browser.close();
-  })();
-});
-
-// app.get('/export/pdf', (req, res) => {
-//   (async () => {
-//       const browser = await puppeteer.launch()
-//       const page = await browser.newPage()
-//       await page.goto('http://localhost:3000/export/html')
-//       const buffer = await page.pdf({format: 'A4', …})
-//       res.type('application/pdf')
-//       res.send(buffer)
-//       browser.close()
-//   })()
-
-// })
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "client", "build")));
