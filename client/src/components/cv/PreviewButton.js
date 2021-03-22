@@ -11,8 +11,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PreviewButton = () => {
+const PreviewButton = ({ cvId, userName }) => {
   const classes = useStyles();
+
   return (
     <Fab
       style={{ textTransform: "none" }}
@@ -21,6 +22,9 @@ const PreviewButton = () => {
       color="primary"
       aria-label="add"
       className={classes.fab}
+      onClick={() => {
+        window.open(`/cv/preview/${userName}/${cvId}`, "_blank");
+      }}
     >
       <strong>Preview & Download</strong>
       <Box ml={1}>

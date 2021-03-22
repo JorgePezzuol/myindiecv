@@ -61,6 +61,7 @@ app.get("/api/cv/edit/:cvId", async (req, res) => {
 
     res.send({
       name: cv.name,
+      _id: cv._id,
       personalDetails: personalDetails,
       professionalSummary: professionalSummary,
       employmentList: employmentList,
@@ -140,20 +141,19 @@ app.post("/api/cv/create", async (req, res) => {
   }
 });
 
-app.get("/api/export/pdf", (req, res) => {
+// check owner of cv
+app.get("/api/export/pdf/:cvId", (req, res) => {
   (async () => {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    await page.goto("http://localhost:3000/preview", {
+    await page.goto(`http://localhost:3000/cv/print/${req.params.cvId}`, {
       waitUntil: ["domcontentloaded", "load", "networkidle0"],
     });
-
     const buffer = await page.pdf({
       printBackground: true,
       format: "a3",
       PreferCSSPageSize: true,
     });
-
     res.type("application/pdf");
     res.send(buffer);
     await browser.close();

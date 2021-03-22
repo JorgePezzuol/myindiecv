@@ -75,7 +75,7 @@ const Language = ({ attributes, handleDelete }) => {
               <Grid item xs={12} sm={6}>
                 <FormControl size="small" fullWidth variant="outlined">
                   <InputLabel htmlFor="outlined-age-native-simple">
-                    Age
+                    Level
                   </InputLabel>
                   <Select
                     native
@@ -88,19 +88,6 @@ const Language = ({ attributes, handleDelete }) => {
                     }
                     label="Level"
                   >
-                    <option value={"Native speaker"}>Native speaker</option>
-                    <option value={"Highly proficient"}>
-                      Highly proficient
-                    </option>
-                    <option value={"Very good command"}>
-                      Very good command
-                    </option>
-                    <option value={"Good working knowledge"}>
-                      Good working knowledge
-                    </option>
-                    <option value={"Working knowledge"}>
-                      Working knowledge
-                    </option>
                     <option value={"C2"}>C2</option>
                     <option value={"C1"}>C1</option>
                     <option value={"B2"}>B2</option>

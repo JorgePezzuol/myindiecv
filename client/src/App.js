@@ -5,6 +5,7 @@ import Dashboard from "./pages/cv/Dashboard";
 import Edit from "./pages/cv/Edit";
 import Signup from "./pages/Signup";
 import CvPreview from "./pages/cv/CvPreview";
+import CvPrint from "./pages/cv/CvPrint";
 
 // CHECK THIS => https://material-ui.com/styles/basics/
 
@@ -18,7 +19,8 @@ function App() {
         <Route component={Dashboard} exact path="/dashboard" />
         <Route component={Edit} exact path="/cv/edit/:cvId" />
         <Route component={Signup} exact path="/signup" />
-        <Route component={CvPreview} exact path="/preview" />
+        <Route component={CvPreview} exact path="/cv/preview/:userName/:cvId" />
+        <Route component={CvPrint} exact path="/cv/print/:cvId" />
       </Switch>
     </Router>
   );

@@ -5,11 +5,8 @@ import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
-import Fab from "@material-ui/core/Fab";
-import PrintIcon from "@material-ui/icons/Print";
 import "../../assets/cvpreview.css";
 import { fetchCvById } from "../../services/CvService";
-import { API_URL } from "../../utils/utils";
 import SocialLinksPreview from "../../components/cv/preview/SocialLinksPreview";
 import PersonalDetailsPreview from "../../components/cv/preview/PersonalDetailsPreview";
 import EmploymentHistoryPreview from "../../components/cv/preview/EmploymentHistoryPreview";
@@ -45,14 +42,9 @@ const useStyles = makeStyles((theme) => ({
     textTransform: "uppercase",
     letterSpacing: "2px",
   },
-  fab: {
-    position: "fixed",
-    bottom: theme.spacing(2),
-    right: theme.spacing(2),
-  },
 }));
 
-const CvPreview = () => {
+const CvPrint = () => {
   const classes = useStyles();
 
   const { cvId } = useParams();
@@ -176,26 +168,10 @@ const CvPreview = () => {
           />
         </Grid>
       </Grid>
-      <Fab
-        style={{ textTransform: "none" }}
-        variant="extended"
-        size="large"
-        color="primary"
-        aria-label="add"
-        className={classes.fab}
-        onClick={() => {
-          window.open(`${API_URL}/export/pdf/${cv._id}`);
-        }}
-      >
-        <strong>Print</strong>
-        <Box ml={1}>
-          <PrintIcon />
-        </Box>
-      </Fab>
     </div>
   ) : (
-    <p>Loading...</p>
+    <React.Fragment></React.Fragment>
   );
 };
 
-export default CvPreview;
+export default CvPrint;

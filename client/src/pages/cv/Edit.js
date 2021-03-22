@@ -29,6 +29,9 @@ const Edit = () => {
 
   const [cv, setCv] = useState(null);
 
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userName = user.firstName.concat(user.lastName).trim().toLowerCase();
+
   useEffect(() => {
     const getCvById = async () => {
       const data = await fetchCvById(cvId);
@@ -66,7 +69,7 @@ const Edit = () => {
         <Grid container spacing={4}>
           <CvDataWrapper cv={cv} />
         </Grid>
-        <PreviewButton />
+        <PreviewButton cvId={cv._id} userName={userName} />
       </Container>
     </React.Fragment>
   ) : (

@@ -20,7 +20,6 @@ const PickableSkills = ({ initialValue }) => {
     "C#",
     "Git",
     "Linux",
-    "Amazon Cloud",
     "Azure",
     "Python",
     "Golang",
