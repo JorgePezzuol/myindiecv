@@ -160,4 +160,15 @@ app.get("/api/export/pdf/:cvId", (req, res) => {
   })();
 });
 
+app.delete("/api/cv/:cvId", async (req, res) => {
+  try {
+    await cvModel.remove({
+      _id: ObjectId(req.params.cvId),
+    });
+    res.send({ message: "CV has been deleted" });
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
 module.exports = app;

@@ -12,7 +12,7 @@ const LanguageSchema = mongoose.Schema({
   },
   level: {
     type: String,
-    default: "Good working knowledge",
+    default: "A1",
   },
 });
 

@@ -12,7 +12,7 @@ const EducationHistoryPreview = ({ classes, educationList }) => {
         </Typography>
       </Box>
       {educationList.map((education, index) => (
-        <Grid container spacing={4} key={index}>
+        <Grid container spacing={3} key={index}>
           <Grid item sm={10}>
             <Typography className={classes.employment}>
               {education.degree} - {education.school}

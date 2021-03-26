@@ -13,7 +13,7 @@ const EmploymentHistoryPreview = ({ employmentList, classes }) => {
       </Box>
       {employmentList.map((employment, index) => (
         <Box key={index} mb={4}>
-          <Grid container spacing={4}>
+          <Grid container spacing={3}>
             <Grid item sm={10}>
               <Typography className={classes.employment}>
                 {employment.jobTitle}, {employment.employer}

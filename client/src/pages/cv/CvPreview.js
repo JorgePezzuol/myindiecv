@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
+import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
+import Backdrop from "@material-ui/core/Backdrop";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import Fab from "@material-ui/core/Fab";
@@ -19,6 +22,10 @@ const useStyles = makeStyles((theme) => ({
   root: {
     padding: 40,
     float: "left",
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: "#000",
   },
   bold: {
     fontWeight: 600,
@@ -75,9 +82,9 @@ const CvPreview = () => {
   }, [cvId]);
 
   return cv !== null ? (
-    <div id="wrapper" className={classes.root}>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
+    <Container maxWidth="lg">
+      <Grid container sm={12} xs={12}>
+        <Grid item sm={12} xs={12}>
           <Box mb={2}>
             <Typography className={classes.nameSurname}>
               {cv.personalDetails.firstName}
@@ -86,7 +93,7 @@ const CvPreview = () => {
               {cv.personalDetails.lastName}
             </Typography>
             <Typography className={classes.normalText}>
-              {cv.jobTitle}
+              {cv.personalDetails.jobTitle}
             </Typography>
             <br />
             <Divider />
@@ -139,12 +146,8 @@ const CvPreview = () => {
             ))}
           </Box>
         </Grid>
-
         <Grid item sm={1} style={{ maxWidth: "3.33%" }}>
-          <Divider
-            style={{ position: "relative", top: "-32px" }}
-            orientation="vertical"
-          />
+          <Divider orientation="vertical" />
         </Grid>
         <Grid item sm={8}>
           <Box mb={3}>
@@ -192,9 +195,11 @@ const CvPreview = () => {
           <PrintIcon />
         </Box>
       </Fab>
-    </div>
+    </Container>
   ) : (
-    <p>Loading...</p>
+    <Backdrop className={classes.backdrop} open={true}>
+      <CircularProgress color="inherit" />
+    </Backdrop>
   );
 };
 

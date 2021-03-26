@@ -5,25 +5,10 @@ const jwt = require("jsonwebtoken");
 const auth = require("../auth/auth");
 const app = express();
 
-app.get("/users", auth.authenticateToken, async (req, res) => {
+app.get("/api/users", auth.authenticateToken, async (req, res) => {
   try {
-    //const users = await userModel.find({ _id: "6042db186b9b6c2c374d6e73" });
     const users = await userModel.find({});
     res.send(users);
-  } catch (err) {
-    res.status(500).send(err);
-  }
-});
-
-app.post("/user", async (req, res) => {
-  const hashedPass = await bcrypt.hash(req.body.password, 10);
-  const user = new userModel({
-    email: req.body.email,
-    password: hashedPass,
-  });
-  try {
-    await user.save();
-    res.send(user);
   } catch (err) {
     res.status(500).send(err);
   }
@@ -38,10 +23,10 @@ app.get("/users/:email", async (req, res) => {
   }
 });
 
-app.post("/login", async (req, res) => {
+app.post("/api/users/login", async (req, res) => {
   try {
     const user = await userModel.findOne({ email: req.body.email });
-    const cmp = await bcrypt.compare(req.body.password, user.password);
+    const cmp = await user.isValidPassword(req.body.password);
 
     if (user && cmp) {
       const token = jwt.sign(user.toJSON(), process.env.ACCESS_TOKEN_SECRET, {
@@ -52,13 +37,22 @@ app.post("/login", async (req, res) => {
         httpOnly: false,
         sameSite: false,
       });
-      console.log(user.toJSON());
       res.status(200).send(user.toJSON());
     } else {
-      res.sendStatus(404);
+      res.sendStatus(401);
     }
   } catch (err) {
-    res.sendStatus(500);
+    res.sendStatus(401);
+  }
+});
+
+app.post("/api/users/create", async (req, res) => {
+  const user = new userModel(req.body);
+  try {
+    await user.save();
+    res.send(user);
+  } catch (err) {
+    res.status(500).send(err);
   }
 });
 

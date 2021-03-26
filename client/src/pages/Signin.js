@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 
@@ -14,9 +14,11 @@ import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
+import MuiAlert from "@material-ui/lab/Alert";
 
 import Copyright from "../components/Copyright";
 import { API_URL } from "../utils/utils";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,38 +57,58 @@ const Signin = () => {
   const classes = useStyles();
   const { push } = useHistory();
 
-  const [email, setEmail] = useState("");
+  const [hasLoginFailed, setHasLoginFailed] = useState(false);
+  const [user, setUser] = useLocalStorage("user", {});
+  const [remember, setRemember] = useLocalStorage("remember", false);
+  const [emailRemember, setEmailRemember] = useLocalStorage(
+    "emailRemember",
+    ""
+  );
+  const [email, setEmail] = useState(emailRemember);
   const [password, setPassword] = useState("");
 
   const fetchToken = async () => {
-    const response = await fetch("/login", {
+    const response = await fetch(`${API_URL}/users/login`, {
       method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({ email: "jorge2@test.com", password: "testpass" }),
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify({ email: email, password: password }),
     });
-    const data = await response.json();
+    let data = null;
+    if (response.ok) {
+      data = await response.json();
+    }
     return data;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const response = await fetchToken();
+
     if (response) {
-      localStorage.setItem("user", JSON.stringify(response));
+      setUser(response);
+      false === remember ? setEmailRemember("") : setEmailRemember(email);
       push({
         pathname: "/dashboard",
         state: {},
       });
+    } else {
+      setHasLoginFailed(true);
     }
   };
+
+  const Alert = (props) => (
+    <MuiAlert elevation={6} variant="filled" {...props} />
+  );
 
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        {hasLoginFailed && (
+          <Alert severity="error">Wrong username or password</Alert>
+        )}
+
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
@@ -116,8 +138,17 @@ const Signin = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+
             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
+              control={
+                <Checkbox
+                  checked={remember}
+                  onChange={(e) => {
+                    setRemember(!remember);
+                  }}
+                  color="primary"
+                />
+              }
               label="Remember me"
             />
             <Button
@@ -136,7 +167,16 @@ const Signin = () => {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    push({
+                      pathname: "/signup",
+                    });
+                  }}
+                  variant="body2"
+                >
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

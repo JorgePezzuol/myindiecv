@@ -8,6 +8,7 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import { makeStyles } from "@material-ui/core/styles";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -26,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SessionAppBar = () => {
   const classes = useStyles();
+  const { push } = useHistory();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -53,14 +55,16 @@ const SessionAppBar = () => {
           CV Maker
         </Typography>
         <nav>
-          <Link
-            variant="button"
+          <Button
             color="textPrimary"
-            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              push("/dashboard");
+            }}
             className={classes.link}
           >
-            Buy me a Coffee
-          </Link>
+            Dashboard
+          </Button>
         </nav>
         <Button
           aria-controls="simple-menu"
@@ -78,6 +82,7 @@ const SessionAppBar = () => {
           onClose={handleClose}
         >
           <MenuItem onClick={handleClose}>My account</MenuItem>
+          <MenuItem onClick={handleClose}>Buy my a coffee</MenuItem>
           <MenuItem onClick={handleClose}>Logout</MenuItem>
         </Menu>
       </Toolbar>

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -10,19 +11,12 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import Copyright from "../components/Copyright";
+import MuiAlert from "@material-ui/lab/Alert";
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import { API_URL } from "../utils/utils";
+import useLocalStorage from "../hooks/useLocalStorage";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -47,8 +41,48 @@ const useStyles = makeStyles((theme) => ({
 export default function Signup() {
   const classes = useStyles();
 
+  const { push } = useHistory();
+  const [hasCreateFailed, setHasCreateFailed] = useState(false);
+  const [_user, _setUser] = useLocalStorage("user", {});
+  const [user, setUser] = useState({
+    email: "",
+    password: "",
+    firstName: "",
+    lastName: "",
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const response = await fetch(`${API_URL}/users/create`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify(user),
+    });
+    if (response.ok) {
+      const data = await response.json();
+      _setUser(data);
+      push({
+        pathname: "/dashboard",
+        state: {},
+      });
+    } else {
+      setHasCreateFailed(true);
+    }
+  };
+
+  const Alert = (props) => (
+    <MuiAlert elevation={6} variant="filled" {...props} />
+  );
+
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="sm">
+      {hasCreateFailed && (
+        <Alert severity="error">
+          Unable to create new user. Try changing the email address.
+        </Alert>
+      )}
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -57,11 +91,10 @@ export default function Signup() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
-                autoComplete="fname"
                 name="firstName"
                 variant="outlined"
                 required
@@ -69,6 +102,13 @@ export default function Signup() {
                 id="firstName"
                 label="First Name"
                 autoFocus
+                value={user.firstName}
+                onChange={(e) =>
+                  setUser({
+                    ...user,
+                    firstName: e.target.value,
+                  })
+                }
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -79,7 +119,13 @@ export default function Signup() {
                 id="lastName"
                 label="Last Name"
                 name="lastName"
-                autoComplete="lname"
+                value={user.lastName}
+                onChange={(e) =>
+                  setUser({
+                    ...user,
+                    lastName: e.target.value,
+                  })
+                }
               />
             </Grid>
             <Grid item xs={12}>
@@ -90,7 +136,14 @@ export default function Signup() {
                 id="email"
                 label="Email Address"
                 name="email"
-                autoComplete="email"
+                type="email"
+                value={user.email}
+                onChange={(e) =>
+                  setUser({
+                    ...user,
+                    email: e.target.value,
+                  })
+                }
               />
             </Grid>
             <Grid item xs={12}>
@@ -102,7 +155,13 @@ export default function Signup() {
                 label="Password"
                 type="password"
                 id="password"
-                autoComplete="current-password"
+                value={user.password}
+                onChange={(e) =>
+                  setUser({
+                    ...user,
+                    password: e.target.value,
+                  })
+                }
               />
             </Grid>
           </Grid>
@@ -117,8 +176,17 @@ export default function Signup() {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
-                Already have an account? Sign in
+              <Link
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  push({
+                    pathname: "/login",
+                  });
+                }}
+                variant="body2"
+              >
+                {"Already have an account? Sign in"}
               </Link>
             </Grid>
           </Grid>

@@ -1,20 +1,26 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { makeStyles } from "@material-ui/core/styles";
+
+import Snackbar from "../../components/utils/SnackBar";
+import AlertDialogSlide from "../../components/utils/AlertDialogSlide";
+
+import SessionAppBar from "../../components/auth/SessionAppBar";
+import nocvs from "../../assets/empty.svg";
+import { API_URL } from "../../utils/utils";
+
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import AddIcon from "@material-ui/icons/Add";
+import CreateIcon from "@material-ui/icons/Create";
+import GetAppIcon from "@material-ui/icons/GetApp";
+import DeleteIcon from "@material-ui/icons/Delete";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
-import Link from "@material-ui/core/Link";
-import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
-import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import { Link as LinkRouter, useHistory } from "react-router-dom";
-import SessionAppBar from "../../components/auth/SessionAppBar";
-import Footer from "../../components/Footer";
-import { API_URL } from "../../utils/utils";
 
 const useStyles = makeStyles((theme) => ({
   heroContent: {
@@ -33,9 +39,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
   },
-  cardMedia: {
-    paddingTop: "56.25%", // 16:9
-  },
   cardContent: {
     flexGrow: 1,
   },
@@ -44,9 +47,10 @@ const useStyles = makeStyles((theme) => ({
 const Dashboard = () => {
   const classes = useStyles();
   const [cvs, setCvs] = useState([]);
+  const [hasDeleted, setHasDeleted] = useState(false);
+  const [cvToBeDeleted, setCvToBeDeleted] = useState("");
   const { push } = useHistory();
 
-  /* Put some image showing that there are no CVs (in case theres 0)*/
   useEffect(() => {
     const fetchCvs = async () => {
       const response = await fetch(`${API_URL}/cv/user`, {
@@ -72,10 +76,31 @@ const Dashboard = () => {
     });
   };
 
+  const handleDelete = async (cvId) => {
+    await fetch(`${API_URL}/cv/${cvId}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+    setCvs(cvs.filter((cv) => cv._id !== cvId));
+    setHasDeleted(true);
+    setCvToBeDeleted("");
+  };
+
   return (
     <React.Fragment>
       <CssBaseline />
       <SessionAppBar />
+      {hasDeleted && (
+        <Snackbar setHasDeleted={setHasDeleted} message="CV has been deleted" />
+      )}
+      {cvToBeDeleted !== "" && (
+        <AlertDialogSlide
+          title={"Delete CV"}
+          contentText={"Are you sure you want to delete this CV?"}
+          handleConfirm={() => handleDelete(cvToBeDeleted)}
+          handleClose={() => setCvToBeDeleted("")}
+        />
+      )}
       <div className={classes.heroContent}>
         <Container maxWidth="sm">
           <Typography
@@ -86,14 +111,6 @@ const Dashboard = () => {
           >
             Dashboard
           </Typography>
-          <Typography
-            variant="h5"
-            align="center"
-            color="textSecondary"
-            paragraph
-          >
-            Lorem ipsum asdasd asdfgdgj asdijas
-          </Typography>
           <div className={classes.heroButtons}>
             <Grid container spacing={2} justify="center">
               <Grid item>
@@ -101,15 +118,9 @@ const Dashboard = () => {
                   startIcon={<AddIcon />}
                   variant="contained"
                   color="primary"
-                  size="large"
                   onClick={handleCreateNewCv}
                 >
                   Create New
-                </Button>
-              </Grid>
-              <Grid item>
-                <Button variant="outlined" color="primary">
-                  Play main CV
                 </Button>
               </Grid>
             </Grid>
@@ -118,44 +129,60 @@ const Dashboard = () => {
       </div>
       <Container className={classes.cardGrid} maxWidth="md">
         <Grid container spacing={4}>
-          {cvs.map((cv) => (
-            <Grid item key={cv} xs={12} sm={6} md={4}>
-              <Card className={classes.card}>
-                <CardMedia
-                  className={classes.cardMedia}
-                  image="https://source.unsplash.com/random"
-                  title="Image title"
-                />
-                <CardContent className={classes.cardContent}>
-                  <Typography gutterBottom variant="h5" component="h2">
-                    Heading
-                  </Typography>
-                  <Typography>
-                    This is a media card. You can use this section to describe
-                    the content.
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button
-                    size="small"
-                    color="primary"
-                    onClick={() => push(`/cv/edit/${cv._id}`)}
-                  >
-                    Edit
-                  </Button>
-                  <Button size="small" color="primary">
-                    PDF
-                  </Button>
-                  <Button size="small" color="primary">
-                    Play
-                  </Button>
-                </CardActions>
-              </Card>
+          {cvs.length > 0 ? (
+            cvs.map((cv) => (
+              <Grid item key={cv} xs={12} sm={6} md={5}>
+                <Card className={classes.card}>
+                  <CardContent className={classes.cardContent}>
+                    <Typography gutterBottom variant="h5" component="h2">
+                      {cv.name}
+                    </Typography>
+                    <Typography>Updated 3 March, 01:49</Typography>
+                  </CardContent>
+                  <CardActions>
+                    <Button
+                      startIcon={<CreateIcon />}
+                      size="small"
+                      color="primary"
+                      onClick={() => push(`/cv/edit/${cv._id}`)}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      startIcon={<GetAppIcon />}
+                      size="small"
+                      color="primary"
+                      onClick={() => {
+                        window.open(`${API_URL}/export/pdf/${cv._id}`);
+                      }}
+                    >
+                      Download
+                    </Button>
+                    <Button
+                      startIcon={<DeleteIcon />}
+                      size="small"
+                      color="primary"
+                      onClick={() => setCvToBeDeleted(cv._id)}
+                    >
+                      Delete
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            ))
+          ) : (
+            <Grid
+              container
+              alignItems="center"
+              justify="center"
+              direction="column"
+            >
+              <img style={{ width: "50%" }} src={nocvs} alt="No Cv" />
+              <small>No CVs created</small>
             </Grid>
-          ))}
+          )}
         </Grid>
       </Container>
-      <Footer />
     </React.Fragment>
   );
 };
