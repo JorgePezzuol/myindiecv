@@ -168,7 +168,9 @@ app.patch("/api/cv/:cvId", async (req, res) => {
 // check owner of cv
 app.get("/api/export/pdf/:cvId", (req, res) => {
   (async () => {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
     const page = await browser.newPage();
     // await page.goto(`http://localhost:3000/cv/print/${req.params.cvId}`, {
     //   waitUntil: ["domcontentloaded", "load", "networkidle0"],
