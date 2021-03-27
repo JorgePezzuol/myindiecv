@@ -10,6 +10,7 @@ const CvSchema = mongoose.Schema({
     type: String,
     default: "Untitled",
   },
+  lastUpdated: { type: Date, default: Date.now },
 });
 
 const CvModel = mongoose.model("cvs", CvSchema);

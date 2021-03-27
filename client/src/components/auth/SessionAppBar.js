@@ -3,12 +3,12 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import Link from "@material-ui/core/Link";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
+import { API_URL } from "../../utils/utils";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -38,6 +38,16 @@ const SessionAppBar = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleLogout = async () => {
+    await fetch(`${API_URL}/users/logout`, {
+      credentials: "include",
+    });
+    push({
+      pathname: "/login",
+    });
+  };
+
   return (
     <AppBar
       position="static"
@@ -81,9 +91,8 @@ const SessionAppBar = () => {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <MenuItem onClick={handleClose}>My account</MenuItem>
           <MenuItem onClick={handleClose}>Buy my a coffee</MenuItem>
-          <MenuItem onClick={handleClose}>Logout</MenuItem>
+          <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>
       </Toolbar>
     </AppBar>

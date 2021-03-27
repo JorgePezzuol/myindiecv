@@ -14,7 +14,9 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import SessionAppBar from "../../components/auth/SessionAppBar";
 import CvDataWrapper from "../../components/cv/CvDataWrapper";
 import PreviewButton from "../../components/cv/PreviewButton";
+import UpdateCvNameDialog from "../../components/cv/UpdateCvNameDialog";
 import { fetchCvById } from "../../services/CvService";
+import { API_URL } from "../../utils/utils";
 
 const useStyles = makeStyles((theme) => ({
   heroContent: {
@@ -35,6 +37,7 @@ const Edit = () => {
 
   const { cvId } = useParams();
   const [cv, setCv] = useState(null);
+  const [isUpdatingCvName, setIsUpdatingCvName] = useState(false);
   const [user, setUser] = useLocalStorage("user", {});
 
   useEffect(() => {
@@ -45,10 +48,24 @@ const Edit = () => {
     getCvById();
   }, [cvId]);
 
+  const handleChangeName = (name) => {
+    setCv({
+      ...cv,
+      name: name,
+    });
+  };
+
   return cv !== null ? (
     <React.Fragment>
       <CssBaseline />
       <SessionAppBar />
+      {isUpdatingCvName && (
+        <UpdateCvNameDialog
+          handleClose={setIsUpdatingCvName}
+          handleUpdate={handleChangeName}
+          cvId={cvId}
+        />
+      )}
       <div className={classes.heroContent}>
         <Container maxWidth="sm">
           <Typography
@@ -57,7 +74,7 @@ const Edit = () => {
             color="textPrimary"
             gutterBottom
             style={{ cursor: "pointer" }}
-            onClick={() => console.log("a")}
+            onClick={() => setIsUpdatingCvName(true)}
           >
             {cv.name}
           </Typography>

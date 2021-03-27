@@ -111,6 +111,14 @@ const Dashboard = () => {
           >
             Dashboard
           </Typography>
+          <Typography
+            variant="h6"
+            align="center"
+            color="textSecondary"
+            paragraph
+          >
+            Create and update your CVs
+          </Typography>
           <div className={classes.heroButtons}>
             <Grid container spacing={2} justify="center">
               <Grid item>
@@ -130,14 +138,20 @@ const Dashboard = () => {
       <Container className={classes.cardGrid} maxWidth="md">
         <Grid container spacing={4}>
           {cvs.length > 0 ? (
-            cvs.map((cv) => (
-              <Grid item key={cv} xs={12} sm={6} md={5}>
+            cvs.map((cv, index) => (
+              <Grid item key={index} xs={12} sm={6} md={5}>
                 <Card className={classes.card}>
                   <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant="h5" component="h2">
                       {cv.name}
                     </Typography>
-                    <Typography>Updated 3 March, 01:49</Typography>
+                    <small>
+                      Updated{" "}
+                      {new Date(cv.lastUpdated).toLocaleString([], {
+                        timeStyle: "short",
+                        dateStyle: "short",
+                      })}
+                    </small>
                   </CardContent>
                   <CardActions>
                     <Button

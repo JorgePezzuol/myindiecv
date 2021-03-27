@@ -59,9 +59,19 @@ app.get("/api/cv/edit/:cvId", async (req, res) => {
       cv: ObjectId(req.params.cvId),
     });
 
+    await cvModel.findOneAndUpdate(
+      {
+        _id: ObjectId(req.params.cvId),
+      },
+      {
+        lastUpdated: new Date(),
+      }
+    );
+
     res.send({
       name: cv.name,
       _id: cv._id,
+      lastUpdated: cv.lastUpdated,
       personalDetails: personalDetails,
       professionalSummary: professionalSummary,
       employmentList: employmentList,
@@ -136,6 +146,20 @@ app.post("/api/cv/create", async (req, res) => {
       personalDetails: personalDetails,
       professionalSummary: professionalSummary,
     });
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
+app.patch("/api/cv/:cvId", async (req, res) => {
+  try {
+    await cvModel.findOneAndUpdate(
+      {
+        _id: ObjectId(req.params.cvId),
+      },
+      req.body
+    );
+    res.status(200).send({ message: "CV Updated" });
   } catch (err) {
     res.status(500).send(err);
   }
