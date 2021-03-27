@@ -170,9 +170,15 @@ app.get("/api/export/pdf/:cvId", (req, res) => {
   (async () => {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    await page.goto(`http://localhost:3000/cv/print/${req.params.cvId}`, {
-      waitUntil: ["domcontentloaded", "load", "networkidle0"],
-    });
+    // await page.goto(`http://localhost:3000/cv/print/${req.params.cvId}`, {
+    //   waitUntil: ["domcontentloaded", "load", "networkidle0"],
+    // });
+    await page.goto(
+      `https://myindiecv.herokuapp.com/cv/print/${req.params.cvId}`,
+      {
+        waitUntil: ["domcontentloaded", "load", "networkidle0"],
+      }
+    );
     const buffer = await page.pdf({
       printBackground: true,
       format: "a3",

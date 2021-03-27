@@ -33,11 +33,11 @@ app.post("/api/users/login", async (req, res) => {
         expiresIn: "7d",
       });
       res.cookie("token", token, {
-        secure: process.env.NODE_ENV === "production" ? false : false,
-        httpOnly: false,
-        sameSite: false,
+        secure: process.env.NODE_ENV === "production" ? true : false,
+        httpOnly: true,
+        sameSite: true,
         maxAge: 24 * 60 * 60 * 7000,
-        //domain:
+        domain: "https://myindiecv.herokuapp.com/",
       });
       res.status(200).send(user.toJSON());
     } else {
@@ -51,7 +51,7 @@ app.post("/api/users/login", async (req, res) => {
 app.get("/api/users/logout", async (req, res) => {
   res
     .cookie("token", "", {
-      //domain: "https://my.domain.com",
+      domain: "https://myindiecv.herokuapp.com/",
       maxAge: 0,
       overwrite: true,
     })
@@ -66,11 +66,11 @@ app.post("/api/users/create", async (req, res) => {
       expiresIn: "7d",
     });
     res.cookie("token", token, {
-      secure: process.env.NODE_ENV === "production" ? false : false,
-      httpOnly: false,
-      sameSite: false,
+      secure: process.env.NODE_ENV === "production" ? true : false,
+      httpOnly: true,
+      sameSite: true,
       maxAge: 24 * 60 * 60 * 7000,
-      //domain:
+      domain: "https://myindiecv.herokuapp.com/",
     });
     res.status(200).send(user.toJSON());
   } catch (err) {
