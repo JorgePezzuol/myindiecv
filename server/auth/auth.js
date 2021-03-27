@@ -5,6 +5,7 @@ dotenv.config();
 // CREATE ANOTHER METHOD TO VERIFY IF req.cookies.token (get user)... see if is the same user id in the request
 module.exports.authenticateToken = (req, res, next) => {
   let resp = true;
+  console.log("Cookie: " + req.cookies.token);
   try {
     jwt.verify(
       req.cookies.token,
@@ -17,7 +18,6 @@ module.exports.authenticateToken = (req, res, next) => {
       }
     );
     resp ? res.sendStatus(200) : res.sendStatus(401);
-    console.log(resp);
   } catch (err) {
     res.sendStatus(500);
   }
