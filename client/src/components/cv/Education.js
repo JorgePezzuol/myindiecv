@@ -19,6 +19,7 @@ const Education = ({ attributes, handleDelete }) => {
   useEffect(() => {
     const updateEducation = async (education) => {
       const response = await fetch(`${API_URL}/education/${education._id}`, {
+        credentials: "include",
         method: "PATCH",
         headers: {
           "Content-type": "application/json",

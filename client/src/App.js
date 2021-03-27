@@ -8,24 +8,24 @@ import CvPreview from "./pages/cv/CvPreview";
 import CvPrint from "./pages/cv/CvPrint";
 import Home from "./pages/Home";
 
-// CHECK THIS => https://material-ui.com/styles/basics/
-
-function App() {
+const App = () => {
   return (
     <Router>
       <Switch>
-        <Route component={Dashboard} exact path="/" />
+        <Route component={Home} exact path="/" />
         <Route component={Signin} exact path="/login" />
-        <PrivateRoute component={Signin} path="/profile" exact />
-        <Route component={Dashboard} exact path="/dashboard" />
-        <Route component={Edit} exact path="/cv/edit/:cvId" />
         <Route component={Signup} exact path="/signup" />
-        <Route component={CvPreview} exact path="/cv/preview/:userName/:cvId" />
-        <Route component={CvPrint} exact path="/cv/print/:cvId" />
-        <Route component={Home} exact path="/home" />
+        <PrivateRoute component={Dashboard} exact path="/dashboard" />
+        <PrivateRoute component={Edit} exact path="/cv/edit/:cvId" />
+        <PrivateRoute
+          component={CvPreview}
+          exact
+          path="/cv/preview/:userName/:cvId"
+        />
+        <PrivateRoute component={CvPrint} exact path="/cv/print/:cvId" />
       </Switch>
     </Router>
   );
-}
+};
 
 export default App;

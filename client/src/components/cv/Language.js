@@ -21,6 +21,7 @@ const Language = ({ attributes, handleDelete }) => {
   useEffect(() => {
     const updateLanguage = async (language) => {
       const response = await fetch(`${API_URL}/languages/${language._id}`, {
+        credentials: "include",
         method: "PATCH",
         headers: {
           "Content-type": "application/json",

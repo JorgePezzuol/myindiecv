@@ -1,8 +1,20 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { Route, Redirect } from "react-router-dom";
+import { API_URL } from "../../utils/utils";
+import { makeStyles } from "@material-ui/core/styles";
+import Backdrop from "@material-ui/core/Backdrop";
+import CircularProgress from "@material-ui/core/CircularProgress";
+
+const useStyles = makeStyles((theme) => ({
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: "#000",
+  },
+}));
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
+  const classes = useStyles();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -16,14 +28,16 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   }, []);
 
   const authenticateToken = async () => {
-    const res = await fetch("/authenticateToken", {
+    const res = await fetch(`${API_URL}/authenticateToken`, {
       credentials: "include",
     });
     return res.status === 401 ? false : true;
   };
 
   return isLoading ? (
-    <p>Loading...</p>
+    <Backdrop className={classes.backdrop} open={true}>
+      <CircularProgress color="inherit" />
+    </Backdrop>
   ) : (
     <Route
       {...rest}

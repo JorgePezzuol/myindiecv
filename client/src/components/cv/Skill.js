@@ -21,6 +21,7 @@ const Skill = ({ attributes, handleDelete }) => {
   useEffect(() => {
     const updateSkill = async (skill) => {
       const response = await fetch(`${API_URL}/skills/${skill._id}`, {
+        credentials: "include",
         method: "PATCH",
         headers: {
           "Content-type": "application/json",

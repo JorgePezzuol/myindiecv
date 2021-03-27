@@ -16,6 +16,7 @@ module.exports.authenticateToken = (req, res, next) => {
       }
     );
     resp ? res.sendStatus(200) : res.sendStatus(401);
+    console.log(resp);
   } catch (err) {
     res.sendStatus(500);
   }

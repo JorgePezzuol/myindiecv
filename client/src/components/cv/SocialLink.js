@@ -18,6 +18,7 @@ const SocialLink = ({ attributes, handleDelete }) => {
   useEffect(() => {
     const updateLink = async (socialLink) => {
       const response = await fetch(`${API_URL}/links/${socialLink._id}`, {
+        credentials: "include",
         method: "PATCH",
         headers: {
           "Content-type": "application/json",

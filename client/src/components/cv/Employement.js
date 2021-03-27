@@ -19,6 +19,7 @@ const Employment = ({ attributes, handleDelete }) => {
   useEffect(() => {
     const updateEmployment = async (employment) => {
       const response = await fetch(`${API_URL}/employment/${employment._id}`, {
+        credentials: "include",
         method: "PATCH",
         headers: {
           "Content-type": "application/json",
