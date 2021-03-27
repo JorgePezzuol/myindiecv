@@ -32,6 +32,12 @@ const EmploymentSchema = mongoose.Schema({
   },
 });
 
-module.exports =
-  mongoose.models.employments ||
-  mongoose.model("employments", EmploymentSchema);
+let employmentModel = null;
+
+try {
+  employmentModel = mongoose.model("employments", EmploymentSchema);
+} catch (e) {
+  employmentModel = mongoose.model("employments");
+}
+
+module.exports = employmentModel;
