@@ -37,7 +37,7 @@ app.post("/api/users/login", async (req, res) => {
         httpOnly: true,
         sameSite: true,
         maxAge: 24 * 60 * 60 * 14000,
-        domain: "https://myindiecv.herokuapp.com/",
+        // domain: "https://myindiecv.herokuapp.com/",
         overwrite: true,
       });
       res.status(200).send(user.toJSON());
@@ -52,7 +52,7 @@ app.post("/api/users/login", async (req, res) => {
 app.get("/api/users/logout", async (req, res) => {
   res
     .cookie("token", "", {
-      domain: "https://myindiecv.herokuapp.com/",
+      // domain: "https://myindiecv.herokuapp.com/",
       maxAge: 0,
       overwrite: true,
     })
@@ -71,7 +71,7 @@ app.post("/api/users/create", async (req, res) => {
       httpOnly: true,
       sameSite: true,
       maxAge: 24 * 60 * 60 * 14000,
-      domain: "https://myindiecv.herokuapp.com/",
+      // domain: "https://myindiecv.herokuapp.com/",
       overwrite: true,
     });
     res.status(200).send(user.toJSON());
@@ -83,7 +83,7 @@ app.post("/api/users/create", async (req, res) => {
 app.get("/api/test", async (req, res) => {
   res
     .cookie("token", "", {
-      domain: "https://myindiecv.herokuapp.com/",
+      // domain: "https://myindiecv.herokuapp.com/",
       maxAge: 0,
       overwrite: true,
     })
