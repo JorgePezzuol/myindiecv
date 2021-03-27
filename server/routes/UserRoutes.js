@@ -80,4 +80,14 @@ app.post("/api/users/create", async (req, res) => {
   }
 });
 
+app.get("/api/test", async (req, res) => {
+  res
+    .cookie("token", "", {
+      domain: "https://myindiecv.herokuapp.com/",
+      maxAge: 0,
+      overwrite: true,
+    })
+    .sendStatus(200);
+});
+
 module.exports = app;
