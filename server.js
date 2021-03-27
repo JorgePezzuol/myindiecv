@@ -69,7 +69,7 @@ app.use(require("./server/routes/EducationRoutes"));
 app.use(require("./server/routes/LinksRoutes"));
 app.use(require("./server/routes/LanguageRoutes"));
 app.use(require("./server/routes/SkillRoutes"));
-app.use(require("./server/routes/CvRoutes"));
+app.use(require("./server/routes/FreeCvRoutes"));
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "client", "build")));
