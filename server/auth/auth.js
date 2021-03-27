@@ -12,6 +12,7 @@ module.exports.authenticateToken = (req, res, next) => {
       (err, decoded) => {
         if (err) {
           resp = false;
+          console.log(err);
         }
       }
     );
