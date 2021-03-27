@@ -70,7 +70,6 @@ const Signin = () => {
 
   const fetchToken = async () => {
     const response = await fetch(`${API_URL}/users/login`, {
-      credentials: "include",
       method: "POST",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({ email: email, password: password }),
