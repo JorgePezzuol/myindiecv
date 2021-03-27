@@ -91,7 +91,7 @@ const SessionAppBar = () => {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <MenuItem onClick={handleClose}>Buy my a coffee</MenuItem>
+          {/* <MenuItem onClick={handleClose}>Buy my a coffee</MenuItem> */}
           <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>
       </Toolbar>

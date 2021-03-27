@@ -6,6 +6,7 @@ import Edit from "./pages/cv/Edit";
 import Signup from "./pages/Signup";
 import CvPreview from "./pages/cv/CvPreview";
 import CvPrint from "./pages/cv/CvPrint";
+import Home from "./pages/Home";
 
 // CHECK THIS => https://material-ui.com/styles/basics/
 
@@ -21,6 +22,7 @@ function App() {
         <Route component={Signup} exact path="/signup" />
         <Route component={CvPreview} exact path="/cv/preview/:userName/:cvId" />
         <Route component={CvPrint} exact path="/cv/print/:cvId" />
+        <Route component={Home} exact path="/home" />
       </Switch>
     </Router>
   );
