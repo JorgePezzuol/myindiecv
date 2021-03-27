@@ -36,8 +36,9 @@ app.post("/api/users/login", async (req, res) => {
         secure: process.env.NODE_ENV === "production" ? true : false,
         httpOnly: true,
         sameSite: true,
-        maxAge: 24 * 60 * 60 * 7000,
+        maxAge: 24 * 60 * 60 * 14000,
         domain: "https://myindiecv.herokuapp.com/",
+        overwrite: true,
       });
       res.status(200).send(user.toJSON());
     } else {
@@ -69,8 +70,9 @@ app.post("/api/users/create", async (req, res) => {
       secure: process.env.NODE_ENV === "production" ? true : false,
       httpOnly: true,
       sameSite: true,
-      maxAge: 24 * 60 * 60 * 7000,
+      maxAge: 24 * 60 * 60 * 14000,
       domain: "https://myindiecv.herokuapp.com/",
+      overwrite: true,
     });
     res.status(200).send(user.toJSON());
   } catch (err) {
