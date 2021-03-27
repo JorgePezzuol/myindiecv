@@ -1,5 +1,5 @@
 const express = require("express");
-const employmentModel = require("../models/employmentModel");
+const employmentModel = require("../models/EmploymentModel");
 const auth = require("../auth/auth");
 const app = express();
 const { ObjectId } = require("mongodb");
