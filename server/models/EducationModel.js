@@ -32,5 +32,12 @@ const EducationSchema = mongoose.Schema({
   },
 });
 
-module.exports =
-  mongoose.models.educations || mongoose.model("educations", EducationSchema);
+let educationModel = null;
+
+try {
+  educationModel = mongoose.model("educations", EducationSchema);
+} catch (e) {
+  educationModel = mongoose.model("educations");
+}
+
+module.exports = educationModel;

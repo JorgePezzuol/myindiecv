@@ -1,5 +1,5 @@
 const express = require("express");
-const educationModel = require("../models/educationModel");
+const educationModel = require("../models/EducationModel");
 const auth = require("../auth/auth");
 const app = express();
 const { ObjectId } = require("mongodb");
