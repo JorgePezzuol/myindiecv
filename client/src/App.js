@@ -22,7 +22,7 @@ const App = () => {
           exact
           path="/cv/preview/:userName/:cvId"
         />
-        <PrivateRoute component={CvPrint} exact path="/cv/print/:cvId" />
+        <Route component={CvPrint} exact path="/cv/print/:cvId" />
       </Switch>
     </Router>
   );
