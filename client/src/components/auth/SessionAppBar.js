@@ -9,6 +9,7 @@ import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import { API_URL } from "../../utils/utils";
+import useLocalStorage from "../../hooks/useLocalStorage";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -28,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
 const SessionAppBar = () => {
   const classes = useStyles();
   const { push } = useHistory();
+  const [user, setUser] = useLocalStorage("user", {});
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -81,7 +83,7 @@ const SessionAppBar = () => {
           aria-haspopup="true"
           onClick={handleClick}
         >
-          Jorge Pezzuol
+          {user.firstName} {user.lastName}
           <KeyboardArrowDownIcon />
         </Button>
         <Menu

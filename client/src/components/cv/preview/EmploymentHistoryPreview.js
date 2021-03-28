@@ -31,7 +31,9 @@ const EmploymentHistoryPreview = ({ employmentList, classes }) => {
               </Box>
             </Grid>
             <Grid item sm={2}>
-              <Typography className={classes.normalText}>Lisbon</Typography>
+              <Typography className={classes.normalText}>
+                {employment.city}
+              </Typography>
             </Grid>
           </Grid>
         </Box>
