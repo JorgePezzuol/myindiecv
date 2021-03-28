@@ -13,6 +13,7 @@ const puppeteer = require("puppeteer");
 const app = express();
 const { ObjectId } = require("mongodb");
 const dotenv = require("dotenv");
+const UserModel = require("../models/UserModel");
 dotenv.config();
 
 // remember to check if the cv is really from the user
@@ -167,14 +168,22 @@ app.patch("/api/cv/:cvId", async (req, res) => {
 
 // check owner of cv
 app.get("/api/export/pdf/:cvId", (req, res) => {
+
+  const cv = await cvModel.findOne({
+    _id: ObjectId(req.params.cvId),
+  });
+
+  const user = await UserModel.findOne({
+    _id: ObjectId(cv.user)
+  });
+
+  const fileName = user.firstName + " " +user.lastName;
+
   (async () => {
     const browser = await puppeteer.launch({
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
     const page = await browser.newPage();
-    // await page.goto(`http://localhost:3000/cv/print/${req.params.cvId}`, {
-    //   waitUntil: ["domcontentloaded", "load", "networkidle0"],
-    // });
     await page.goto(
       `https://myindiecv.herokuapp.com/cv/print/${req.params.cvId}`,
       {
@@ -183,6 +192,7 @@ app.get("/api/export/pdf/:cvId", (req, res) => {
     );
     const buffer = await page.pdf({
       printBackground: true,
+      filename: fileName,
       format: "a3",
       PreferCSSPageSize: true,
     });
